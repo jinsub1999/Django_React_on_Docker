@@ -1,5 +1,5 @@
-from django.http.response import HttpResponse
-from django.shortcuts import redirect
+from django.http.response import HttpResponse, JsonResponse
+from django.shortcuts import redirect, get_list_or_404
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils import timezone
 from .models import Product
@@ -21,8 +21,30 @@ def index(req):
             prod = form.save(commit=False)
             prod.added_date = timezone.now()
             prod.save()
+            return redirect(origin)
 
-        return redirect(origin)
+        else:
+            errOrigin: str = origin
+            errOrigin += "?"
+            red = redirect(origin)
+            test = ""
+            for (k, v) in form.errors.as_data().items():
+                for (idx, _v) in enumerate(v):
+                    errOrigin += "{0}{1}={2}&".format(
+                        k, "ERR",
+                        _v.message.encode("utf8").decode("utf8"))
+
+                    # print(_v.message)
+                    # red.set_cookie(
+                    # key="DJANGO_ERROR_{0}_{1}".format(k, idx),
+                    # value=_v.message.encode("utf8"),
+                    # )
+            # print(form.errors.as_data()["name"][0].message)
+            if errOrigin.endswith("&"):
+                errOrigin = errOrigin[:-1]
+            print(errOrigin)
+            return redirect(errOrigin)
+
     else:
         print("??? / ", timezone.now())
         return HttpResponse("??? /", )
@@ -37,3 +59,18 @@ def detail(req, product_id):
         return HttpResponse("POST /{0}".format(product_id))
     else:
         return HttpResponse("??? /{0}".format(product_id))
+
+
+def productList(req):
+    if req.method == "GET":
+        ret = {"data": []}
+        for elem in get_list_or_404(Product):
+            d = {
+                "id": elem.id,
+                "name": elem.name,
+                "price": elem.price,
+                "description": elem.description,
+                "added_date": elem.added_date,
+            }
+            ret["data"].append(d)
+        return JsonResponse(data=ret)

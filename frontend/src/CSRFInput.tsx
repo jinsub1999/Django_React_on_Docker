@@ -3,7 +3,7 @@ import axios from "axios";
 import {Cookies} from "react-cookie";
 
 const CSRFinput = () => {
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState<string>("");
   useEffect(() => {
     async function GetData() {
       try {
@@ -15,8 +15,10 @@ const CSRFinput = () => {
         console.error(e);
       }
     }
-    GetData();
-  }, []);
+    if (token === "") 
+      GetData();
+    }
+  , [token]);
   return (<input hidden={true} name="csrfmiddlewaretoken" value={token} readOnly={true}/>);
 };
 

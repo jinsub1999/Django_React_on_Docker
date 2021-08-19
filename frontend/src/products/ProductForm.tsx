@@ -1,8 +1,10 @@
 import React, {useState} from "react";
-import CSRFinput from "./CSRFInput";
+import CSRFinput from "../CSRFInput";
+import ErrorMsg from "../ErrorMsg";
 
 const ProductForm = () => {
-  const [data, setData] = useState({name: "", price: 0, content: ""});
+  const [data, setData] = useState({name: "", price: undefined, content: ""});
+  const [errorMsg, setErrorMsg] = useState("");
   const ChangeData = (e : React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
@@ -12,6 +14,8 @@ const ProductForm = () => {
 
   return (<form method="POST" action="http://localhost:8000/products/" className="m-3">
     <CSRFinput/>
+
+    <ErrorMsg/>
     <div className="form-group m-3">
       <label htmlFor="name">Product name</label>
       <div className="col-sm-10">

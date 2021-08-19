@@ -9,5 +9,5 @@ class ProductForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(),
             "price": forms.NumberInput(),
-            "content": forms.Textarea(),
+            "description": forms.Textarea(),
         }

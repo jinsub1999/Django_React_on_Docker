@@ -14,6 +14,9 @@ DATABASE = {
         "PASSWORD": os.environ.get("DB_PW"),
         "HOST": "localhost",
         "PORT": "3306",
+        "OPTIONS": {
+            "charset": "utf8"
+        },
     }
 }
 DJANGO_SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
