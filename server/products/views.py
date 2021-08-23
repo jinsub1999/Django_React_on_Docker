@@ -25,21 +25,12 @@ def index(req):
 
         else:
             errOrigin: str = origin
-            errOrigin += "?"
-            red = redirect(origin)
-            test = ""
+            errOrigin += "/products?"
             for (k, v) in form.errors.as_data().items():
                 for (idx, _v) in enumerate(v):
                     errOrigin += "{0}{1}={2}&".format(
                         k, "ERR",
                         _v.message.encode("utf8").decode("utf8"))
-
-                    # print(_v.message)
-                    # red.set_cookie(
-                    # key="DJANGO_ERROR_{0}_{1}".format(k, idx),
-                    # value=_v.message.encode("utf8"),
-                    # )
-            # print(form.errors.as_data()["name"][0].message)
             if errOrigin.endswith("&"):
                 errOrigin = errOrigin[:-1]
             print(errOrigin)

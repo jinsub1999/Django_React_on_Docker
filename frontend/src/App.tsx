@@ -40,7 +40,7 @@ function App() {
         <ul className="list-group">
           <li className="list-group-item">
             Visit
-            <a className="m-1" href="https://github.com/jinsub1999">
+            <a className="link-dark m-1" href="https://github.com/jinsub1999">
               my github page!
             </a>
           </li>
