@@ -4,7 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 dotenv_path = path.join(
-    Path(__file__).resolve().parent.parent.parent, ".env.local")
+    Path(__file__).resolve().parent.parent.parent, ".env")
 load_dotenv(dotenv_path)
 DATABASE = {
     "default": {
@@ -13,7 +13,7 @@ DATABASE = {
         "USER": os.environ.get("DB_USER"),
         "PASSWORD": os.environ.get("DB_PW"),
         # "HOST": "localhost", # local mysql
-        "HOST": "172.17.0.2",  # docker mysql
+        "HOST": "db",  # docker mysql
         "PORT": "3306",
         "OPTIONS": {
             "charset": "utf8"

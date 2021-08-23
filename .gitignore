@@ -22,3 +22,6 @@ frontend/**/**/*.back.*
 
 frontend/**/node_modules
 frontend/**/bower_components
+
+# MacOS
+*.DS_Store

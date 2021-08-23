@@ -6,42 +6,17 @@ const Clock = () => {
   const [currTime, setCurrTime] = useState(new Date());
   useEffect(() => {
     setTimeout(() => {
-      setCurrTime(new Date());
+      setCurrTime(new Date(currTime.getTime() + 1000));
     }, 1000);
   }, [currTime]);
   return (<div>
-    <div>
+    <div className="bg-dark text-light m-1 p-1 rounded">
       {currTime.getFullYear()}년 {currTime.getMonth()}월 {currTime.getDate()}
       일
     </div>
-    <div>
+    <div className="bg-dark text-light m-1 p-1 rounded">
       {currTime.getHours()}시 {currTime.getMinutes()}분{" "}
       {currTime.getSeconds()}초
-    </div>
-  </div>);
-};
-const NavClock = () => {
-  const [currTime, setCurrTime] = useState(new Date());
-  useEffect(() => {
-    setTimeout(() => {
-      setCurrTime(new Date());
-    }, 1000);
-  }, [currTime]);
-  return (<div className="navbar navbar-light bg-secondary">
-    <div className="p-3">
-      <a className="navbar-brand text-center h1" href="#">
-        Homepage
-      </a>
-    </div>
-    <div className="mx-1">
-      <div className="bg-dark text-light m-1 p-1 rounded">
-        {currTime.getFullYear()}년 {currTime.getMonth()}월{" "}
-        {currTime.getDate()}일
-      </div>
-      <div className="bg-dark text-light m-1 p-1 rounded">
-        {currTime.getHours()}시 {currTime.getMinutes()}분{" "}
-        {currTime.getSeconds()}초
-      </div>
     </div>
   </div>);
 };
@@ -85,6 +60,5 @@ const Timer = () => {
 };
 export default Clock;
 export {
-  Timer,
-  NavClock
+  Timer
 };

@@ -1,10 +1,34 @@
 import React from "react";
-import Clock, {Timer} from "./Clock";
+import {Link} from "react-router-dom";
+import Clock from "./Clock";
+import logo from "./images/logo.svg";
 
 const Navbar = () => {
-  return (<div>
-    <Clock/>
-  </div>);
+  return (<nav className="navbar navbar-light bg-secondary">
+    <div className="navbar">
+      <Link to="/" className="navbar-brand mx-2">
+        <img src={logo} width="30" height="30" className="d-inline-block align-top mx-1 img-thumbnail" alt=""/>
+        Homepage
+      </Link>
+      <div className="navbar m-2">
+        <div className="nav navbar-nav flex-row">
+          <li className="mx-2">
+            <Link to="products" className="nav-item  nav-link">
+              Products
+            </Link>
+          </li>
+          <li className="mx-2">
+            <Link to="info" className="nav-item  nav-link">
+              Info
+            </Link>
+          </li>
+        </div>
+      </div>
+    </div>
+    <div className="mx-1">
+      <Clock/>
+    </div>
+  </nav>);
 };
 
 export default Navbar;

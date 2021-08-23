@@ -1,7 +1,5 @@
 import React from "react";
-import {useEffect} from "react";
-import {useState} from "react";
-import {useLocation, useParams} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 
 type errkind = {
   [index: string]: string;
@@ -16,8 +14,6 @@ type FormError = {
 };
 
 const ErrorMsg = () => {
-  const [err, setErr] = useState<FormError[]>([]);
-
   const paramsURL = useLocation().search;
   //   const paramsURL = useLocation().search;
   const params = new URLSearchParams(paramsURL);

@@ -1,0 +1,26 @@
+version: "3.8"
+
+services: 
+
+  django:
+    build: .
+    tty: true
+    ports: 
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes: 
+      - .:/code 
+  db:
+    image: mysql:8.0
+    volumes: 
+      - mysql-data:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: "${DB_PW}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_PORT: 3306
+    ports:
+      - "3302:3306"
+
+
+volumes: 
+  mysql-data:

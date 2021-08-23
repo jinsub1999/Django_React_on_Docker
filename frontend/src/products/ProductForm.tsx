@@ -4,7 +4,6 @@ import ErrorMsg from "../ErrorMsg";
 
 const ProductForm = () => {
   const [data, setData] = useState({name: "", price: undefined, content: ""});
-  const [errorMsg, setErrorMsg] = useState("");
   const ChangeData = (e : React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
@@ -19,7 +18,7 @@ const ProductForm = () => {
     <div className="form-group m-3">
       <label htmlFor="name">Product name</label>
       <div className="col-sm-10">
-        <input id="name" name="name" value={data.name} onChange={ChangeData} placeholder="Find Product" className="form-control"/>
+        <input id="name" name="name" value={data.name} onChange={ChangeData} placeholder="Input your Product" className="form-control"/>
       </div>
     </div>
 
@@ -33,7 +32,7 @@ const ProductForm = () => {
     <div className="form-group m-3">
       <label htmlFor="description">Description</label>
       <div className="col-sm-10">
-        <textarea id="description" name="description" cols={30} rows={5} className="form-control"></textarea>
+        <textarea id="description" name="description" cols={30} rows={5} placeholder="Describe your product." className="form-control"></textarea>
       </div>
     </div>
 
