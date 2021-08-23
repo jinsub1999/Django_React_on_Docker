@@ -23,15 +23,33 @@ const ProductList = () => {
     }
     getProductList();
   }, []);
-  return (<div>
-    <ul>
+  return (<div className="container min-vw-50 p-3">
+    <ul className="list-group">
       {
         data.map((val) => {
-          return (<li key={val.id}>
-            <strong className="mx-1">{val.name}</strong>
-            {new Date(val.added_date).toDateString()}
-            {val.price}
-            {val.description}
+          const add_Date = new Date(val.added_date);
+          return (<li key={val.id} className="list-group-item d-flex justify-content-between align-items-start">
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">{val.name}</div>
+              <div>
+                추가일 : {add_Date.getFullYear()}년 {add_Date.getMonth()}월{" "}
+                {add_Date.getDay()}일
+              </div>
+              <div className="text-truncate" style={{
+                  width: 250,
+                  maxWidth: "100%"
+                }}>
+                {val.description}
+              </div>
+            </div>
+            <a style={{
+                position: "absolute",
+                right: 10,
+                bottom: 10
+              }} className="btn btn-primary" href="#">
+              이동
+            </a>
+            <span className="badge bg-secondary">가격 : {val.price}원</span>
           </li>);
         })
       }

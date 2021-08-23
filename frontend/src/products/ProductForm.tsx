@@ -18,7 +18,7 @@ const ProductForm = () => {
     <div className="form-group m-3">
       <label htmlFor="name">Product name</label>
       <div className="col-sm-10">
-        <input id="name" name="name" value={data.name} onChange={ChangeData} placeholder="Input your Product" className="form-control"/>
+        <input id="name" name="name" value={data.name} onChange={ChangeData} placeholder="Input your product." className="form-control"/>
       </div>
     </div>
 
@@ -36,7 +36,7 @@ const ProductForm = () => {
       </div>
     </div>
 
-    <div className="form-group m-3 d-flex flex-row-reverse ">
+    <div className="form-group m-3 d-flex flex-row-reverse">
       <button type="submit" className="btn btn-primary">
         POST
       </button>

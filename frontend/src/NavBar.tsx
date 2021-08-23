@@ -7,10 +7,10 @@ const Navbar = () => {
   return (<nav className="navbar navbar-light bg-secondary">
     <div className="navbar">
       <Link to="/" className="navbar-brand mx-2">
-        <img src={logo} width="30" height="30" className="d-inline-block align-top mx-1 img-thumbnail" alt=""/>
+        <img src={logo} width="30" height="30" className="d-inline-block align-top mx-3 img-thumbnail" alt=""/>
         Homepage
       </Link>
-      <div className="navbar m-2">
+      <div className="navbar mx-2">
         <div className="nav navbar-nav flex-row">
           <li className="mx-2">
             <Link to="products" className="nav-item  nav-link">

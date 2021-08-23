@@ -15,7 +15,7 @@ def index(req):
         return getResponse
     elif req.method == "POST":
         origin = req.headers["Origin"]
-        print(req.headers["Origin"])
+        origin += "/products?"
         form = ProductForm(req.POST)
         if form.is_valid():
             prod = form.save(commit=False)
@@ -25,7 +25,6 @@ def index(req):
 
         else:
             errOrigin: str = origin
-            errOrigin += "/products?"
             for (k, v) in form.errors.as_data().items():
                 for (idx, _v) in enumerate(v):
                     errOrigin += "{0}{1}={2}&".format(
@@ -33,7 +32,6 @@ def index(req):
                         _v.message.encode("utf8").decode("utf8"))
             if errOrigin.endswith("&"):
                 errOrigin = errOrigin[:-1]
-            print(errOrigin)
             return redirect(errOrigin)
 
     else:
