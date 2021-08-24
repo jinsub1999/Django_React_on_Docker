@@ -17,7 +17,11 @@
 
 2. use command <code>docker-compose up</code> to build images.
 
-3. use command <code>docker-compose down --rmi local</code> to remove images.
+3. use command in **/frontend** <code>yarn</code> to install react-related packages.
+
+4. use command in **/frontend** <code>yarn start</code> to start react-typescript.
+
+5. use command <code>docker-compose down --rmi local</code> to remove images.
 
 <!-- end of list -->
 
