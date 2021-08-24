@@ -9,15 +9,23 @@ const Clock = () => {
       setCurrTime(new Date(currTime.getTime() + 1000));
     }, 1000);
   }, [currTime]);
-  return (<div>
-    <div className="bg-dark text-light m-1 p-1 rounded">
+  return (<div className="">
+    <div className="bg-dark text-light m-1 p-1 rounded" style={{
+        fontSize: 10
+      }}>
+      {currTime.getFullYear()}년 {currTime.getMonth()}월 {currTime.getDate()}
+      일 {currTime.getHours()}시 {currTime.getMinutes()}분{" "}
+      {currTime.getSeconds()}초
+    </div>
+    {/* <div className="bg-dark text-light m-1 p-1 rounded">
       {currTime.getFullYear()}년 {currTime.getMonth()}월 {currTime.getDate()}
       일
     </div>
     <div className="bg-dark text-light m-1 p-1 rounded">
       {currTime.getHours()}시 {currTime.getMinutes()}분{" "}
       {currTime.getSeconds()}초
-    </div>
+    </div> */
+    }
   </div>);
 };
 

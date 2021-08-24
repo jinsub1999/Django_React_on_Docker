@@ -1,5 +1,5 @@
 from django.http.response import HttpResponse, JsonResponse
-from django.shortcuts import redirect, get_list_or_404
+from django.shortcuts import get_object_or_404, redirect, get_list_or_404
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils import timezone
 from .models import Product
@@ -39,21 +39,28 @@ def index(req):
         return HttpResponse("??? /", )
 
 
-@ensure_csrf_cookie
 def detail(req, product_id):
 
     if req.method == "GET":
-        return HttpResponse("GET /{0}".format(product_id))
-    elif req.method == "POST":
-        return HttpResponse("POST /{0}".format(product_id))
+        elem = get_object_or_404(Product, pk=product_id)
+        ret = {
+            "data": {
+                "id": elem.id,
+                "name": elem.name,
+                "price": elem.price,
+                "description": elem.description,
+                "added_date": elem.added_date,
+            }
+        }
+        return JsonResponse(data=ret)
     else:
-        return HttpResponse("??? /{0}".format(product_id))
+        return HttpResponse("Request Method is not GET.")
 
 
 def productList(req):
     if req.method == "GET":
         ret = {"data": []}
-        for elem in get_list_or_404(Product):
+        for elem in get_list_or_404(Product.objects.order_by("-added_date")):
             d = {
                 "id": elem.id,
                 "name": elem.name,

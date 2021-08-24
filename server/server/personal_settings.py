@@ -12,7 +12,7 @@ DATABASE = {
         "NAME": os.environ.get("DB_NAME"),
         "USER": os.environ.get("DB_USER"),
         "PASSWORD": os.environ.get("DB_PW"),
-        # "HOST": "localhost", # local mysql
+        # "HOST": "127.0.0.1",  # local mysql
         "HOST": "db",  # docker mysql
         "PORT": "3306",
         "OPTIONS": {

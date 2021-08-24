@@ -2,7 +2,9 @@ import React, {useState} from "react";
 import CSRFinput from "../CSRFInput";
 import ErrorMsg from "../ErrorMsg";
 
-const ProductForm = () => {
+const ProductForm = ({token} : {
+  token: string
+}) => {
   const [data, setData] = useState({name: "", price: undefined, content: ""});
   const ChangeData = (e : React.ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -12,7 +14,7 @@ const ProductForm = () => {
   };
 
   return (<form method="POST" action="http://localhost:8000/products/" className="m-3">
-    <CSRFinput/>
+    <CSRFinput token={token}/>
 
     <ErrorMsg/>
     <div className="form-group m-3">
@@ -38,7 +40,7 @@ const ProductForm = () => {
 
     <div className="form-group m-3 d-flex flex-row-reverse">
       <button type="submit" className="btn btn-primary">
-        POST
+        SUBMIT
       </button>
     </div>
   </form>);

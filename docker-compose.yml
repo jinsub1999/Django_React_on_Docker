@@ -12,7 +12,7 @@ services:
       - .:/code 
   db:
     image: mysql:8.0
-    platform: linux/amd64 # on M1 Mac
+    # platform: linux/amd64 # on M1 Mac
     volumes: 
       - mysql-data:/var/lib/mysql
     environment: 

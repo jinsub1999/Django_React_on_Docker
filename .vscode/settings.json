@@ -1,4 +1,10 @@
 {
-  "editor.defaultFormatter": "Glavin001.unibeautify-vscode",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.wordBasedSuggestions": false
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "Glavin001.unibeautify-vscode"
+  },
   "editor.formatOnSave": true
 }

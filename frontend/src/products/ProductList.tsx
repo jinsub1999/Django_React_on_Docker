@@ -2,7 +2,8 @@ import React from "react";
 import {useEffect} from "react";
 import {useState} from "react";
 import axios from "axios";
-type pList = {
+import {Link} from "react-router-dom";
+export type pList = {
   id: number;
   name: string;
   price: number;
@@ -30,10 +31,10 @@ const ProductList = () => {
           const add_Date = new Date(val.added_date);
           return (<li key={val.id} className="list-group-item d-flex justify-content-between align-items-start">
             <div className="ms-2 me-auto">
-              <div className="fw-bold">{val.name}</div>
-              <div>
-                추가일 : {add_Date.getFullYear()}년 {add_Date.getMonth()}월{" "}
-                {add_Date.getDay()}일
+              <div className="fs-4 fw-bold">{val.name}</div>
+              <div className="fs-6 text-black-50">
+                추가일시 : {add_Date.getFullYear()}년 {add_Date.getMonth()}월{" "}
+                {add_Date.getDay()}일 {add_Date.getHours()}시
               </div>
               <div className="text-truncate" style={{
                   width: 250,
@@ -42,13 +43,13 @@ const ProductList = () => {
                 {val.description}
               </div>
             </div>
-            <a style={{
+            <Link style={{
                 position: "absolute",
                 right: 10,
                 bottom: 10
-              }} className="btn btn-primary" href="#">
+              }} className="btn btn-primary" to={`/products/${val.id}`}>
               이동
-            </a>
+            </Link>
             <span className="badge bg-secondary">가격 : {val.price}원</span>
           </li>);
         })
