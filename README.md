@@ -17,6 +17,8 @@
 
 2. use command <code>docker-compose up</code> to build images.
 
+   2-2. If you have problem running docker container in Windows, make sure <code>docker-entrypoint.sh</code> has LF EOL, not CRLF EOL.
+
 3. use command in **/frontend** <code>yarn</code> to install react-related packages.
 
 4. use command in **/frontend** <code>yarn start</code> to start react-typescript.
@@ -27,7 +29,7 @@
 
 ## TODO
 
-- [ ] Use "history" in react-router-dom to prevent re-render on Django redirect.
+- [ ] Change some form-submit into button-onClick. (to prevent re-render on Django redirect.)
 
 [1]: https://www.docker.com/get-started
 [2]: https://yarnpkg.com/getting-started/install
