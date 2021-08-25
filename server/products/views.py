@@ -21,7 +21,7 @@ def index(req):
             prod = form.save(commit=False)
             prod.added_date = timezone.now()
             prod.save()
-            return redirect(origin)
+            return HttpResponse("OK")
 
         else:
             errOrigin: str = origin
@@ -32,7 +32,7 @@ def index(req):
                         _v.message.encode("utf8").decode("utf8"))
             if errOrigin.endswith("&"):
                 errOrigin = errOrigin[:-1]
-            return redirect(errOrigin)
+            return HttpResponse("NOT OK")
 
     else:
         print("??? / ", timezone.now())

@@ -9,16 +9,18 @@ const ProductPage = ({data} : {
 }) => {
   const {token} = data;
   const [check, setCheck] = useState(false);
+  const [checkChange, setCheckChange] = useState(false);
+
   return (<div>
     <div>
-      <ProductForm token={token}/>
+      <ProductForm token={token} setChange={setCheckChange}/>
     </div>
     <button className="btn btn-secondary mx-3" onClick={() => {
         setCheck(!check);
       }}>
       ProductList
     </button>
-    {check && <ProductList token={token}/>}
+    {check && (<ProductList token={token} setChange={setCheckChange} checkChange={checkChange}/>)}
   </div>);
 };
 

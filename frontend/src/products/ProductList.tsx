@@ -12,11 +12,12 @@ export type pList = {
   added_date: string;
 };
 
-const ProductList = ({token} : {
-  token: string
+const ProductList = ({token, checkChange, setChange} : {
+  token: string;
+  checkChange: Boolean;
+  setChange: React.Dispatch < React.SetStateAction<boolean> >;
 }) => {
   const [data, setData] = useState<pList[]>([]);
-  const [checkChange, setCheck] = useState(false);
   const his = useHistory();
   useEffect(() => {
     async function getProductList() {
@@ -55,7 +56,7 @@ const ProductList = ({token} : {
                 <Link className="btn btn-primary me-3" to={`/products/${val.id}`}>
                   이동
                 </Link>
-                <button className="btn btn-danger" type="submit" onClick={() => {
+                <button className="btn btn-danger" onClick={() => {
                     const delProduct = async () => {
                       const res = await axios({
                         headers: {},
@@ -69,7 +70,7 @@ const ProductList = ({token} : {
                     };
                     delProduct().then((res) => {
                       if (res === "Deleted") {
-                        setCheck((checkChange) => !checkChange);
+                        setChange((checkChange) => !checkChange);
                         console.log("deleted");
                       }
                     });

@@ -30,6 +30,7 @@
 ## TODO
 
 - [ ] Change some form-submit into button-onClick. (to prevent re-render on Django redirect.)
+- [ ] Change some HttpResponse to JsonResponse in product_view.py.
 
 [1]: https://www.docker.com/get-started
 [2]: https://yarnpkg.com/getting-started/install
