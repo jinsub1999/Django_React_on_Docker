@@ -2,11 +2,14 @@ import React, {useState} from "react";
 import CSRFinput from "../CSRFInput";
 import ErrorMsg from "../ErrorMsg";
 
-const ProductForm = ({token} : {
+const ProductForm = ({
+  token,
+  ...props
+} : {
   token: string
 }) => {
-  const [data, setData] = useState({name: "", price: undefined, content: ""});
-  const ChangeData = (e : React.ChangeEvent<HTMLInputElement>) => {
+  const [data, setData] = useState({name: "", price: 0, content: ""});
+  const ChangeData = (e : |React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     setData({
       ...data,
       [e.target.name]: e.target.value
@@ -34,12 +37,12 @@ const ProductForm = ({token} : {
     <div className="form-group m-3">
       <label htmlFor="description">Description</label>
       <div className="col-sm-10">
-        <textarea id="description" name="description" cols={30} rows={5} placeholder="Describe your product." className="form-control"></textarea>
+        <textarea id="description" name="description" cols={30} rows={5} onChange={ChangeData} placeholder="Describe your product." className="form-control"></textarea>
       </div>
     </div>
 
     <div className="form-group m-3 d-flex flex-row-reverse">
-      <button type="submit" className="btn btn-primary">
+      <button type="submit" className="btn btn-primary" onClick={() => {}}>
         SUBMIT
       </button>
     </div>

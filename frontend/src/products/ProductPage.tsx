@@ -2,10 +2,12 @@ import React from "react";
 import {useState} from "react";
 import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
+import {webDataType} from "../types/types";
 
-const ProductPage = ({token} : {
-  token: string
+const ProductPage = ({data} : {
+  data: webDataType
 }) => {
+  const {token} = data;
   const [check, setCheck] = useState(false);
   return (<div>
     <div>
@@ -16,7 +18,7 @@ const ProductPage = ({token} : {
       }}>
       ProductList
     </button>
-    {check && <ProductList/>}
+    {check && <ProductList token={token}/>}
   </div>);
 };
 

@@ -2,10 +2,12 @@ import React from "react";
 import {Link} from "react-router-dom";
 import CSRFinput from "../CSRFInput";
 import ErrorMsg from "../ErrorMsg";
+import {webDataType} from "../types/types";
 
-const LoginForm = ({token} : {
-  token: string
+const LoginForm = ({data} : {
+  data: webDataType
 }) => {
+  const {token} = data;
   return (<div>
     <form className="m-3" method="POST" action="http://localhost:8000/common/login/">
       <CSRFinput token={token}/>

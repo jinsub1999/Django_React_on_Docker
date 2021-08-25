@@ -9,19 +9,14 @@ import LoginForm from "./userComponent/LoginForm";
 import {useEffect} from "react";
 import {Cookies} from "react-cookie";
 import SignupForm from "./userComponent/SignupForm";
+import {webDataType} from "./types/types";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
 
-type webDataType = {
-  username: string;
-  csrfToken: string;
-};
-
 function App() {
-  const [webData, setWebData] = useState<webDataType>({username: "", csrfToken: ""});
-  const __auth__ = webData.username !== "" && webData.username !== "AnonymousUser";
+  const [webData, setWebData] = useState<webDataType>({username: "", token: ""});
   useEffect(() => {
     const getUserInfo = async () => {
       const usr_name = await axios.get("http://localhost:8000/common/get_user/").then((res) => res.data);
@@ -39,7 +34,7 @@ function App() {
           const c = new Cookies();
           setWebData((webData) => ({
             ...webData,
-            csrfToken: c.get("csrftoken")
+            token: c.get("csrftoken")
           }));
         });
       } catch (e) {
@@ -49,7 +44,7 @@ function App() {
     getToken();
   }, []);
   return (<div className="App">
-    <Navbar auth={__auth__} username={webData.username} token={webData.csrfToken}/>
+    <Navbar data={webData}/>
 
     <Route exact={true} path="/">
       <div className="p-3">
@@ -61,17 +56,17 @@ function App() {
       </div>
     </Route>
     <Route path="/products" exact={true}>
-      <ProductPage token={webData.csrfToken}/>
+      <ProductPage data={webData}/>
     </Route>
     <Route path="/products/:id">
       <ProductDetail/>
     </Route>
 
     <Route path="/login">
-      <LoginForm token={webData.csrfToken}/>
+      <LoginForm data={webData}/>
     </Route>
     <Route path="/signup">
-      <SignupForm token={webData.csrfToken}/>
+      <SignupForm token={webData.token}/>
     </Route>
     <Route path="/info">
       <div className="p-3">

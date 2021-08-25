@@ -70,3 +70,14 @@ def productList(req):
             }
             ret["data"].append(d)
         return JsonResponse(data=ret)
+    else:
+        return HttpResponse("Request Method is not GET.")
+
+
+def productRemove(req, product_id):
+    if req.method == "POST":
+        elem = get_object_or_404(Product, pk=product_id)
+        ret = elem.delete()
+        return HttpResponse("Deleted")
+    else:
+        return HttpResponse("Request Method is not POST.")
