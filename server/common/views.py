@@ -38,7 +38,6 @@ def login(req):
         else:
             errMsg += "?"
             for (k, v) in form.errors.as_data().items():
-                print(k, v)
                 for (idx, _v) in enumerate(v):
                     errMsg += "{0}{1}={2}&".format(
                         k, "ERR",
@@ -67,9 +66,10 @@ def signup(req):
             form.save(commit=False)
             username = form.cleaned_data['username']
             raw_password = form.cleaned_data['password1']
-            if User.objects.get(username=username):
+            if len(User.objects.filter(username=username)):
                 errMsg += "?usernameSIGNUPERR=이미 존재하는 아이디입니다."
             else:
+                form.save()
                 user = authenticate(username=username, password=raw_password)
                 auth_login(req, user)
                 return redirect(req.headers["Origin"])

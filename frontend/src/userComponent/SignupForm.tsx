@@ -29,9 +29,13 @@ const SignupForm = ({token} : {
         <input className="form-control" name="password2" type="password"></input>
       </div>
       <div className="form-group d-flex align-items-center">
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary  me-2">
           SIGN UP
         </button>
+        or
+        <Link to="/login" className="btn btn-secondary ms-2">
+          LOGIN
+        </Link>
       </div>
     </form>
   </div>);
