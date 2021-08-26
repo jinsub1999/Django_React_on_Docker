@@ -1,16 +1,16 @@
 import React from "react";
-import {useState} from "react";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 import Clock from "./Clock";
 import logo from "./images/logo.svg";
 import {webDataType} from "./types/types";
 import LoginButton from "./userComponent/LoginButton";
 import UserInfo from "./userComponent/UserInfo";
 
-const Navbar = ({data} : {
-  data: webDataType
+const Navbar = ({data, setData} : {
+  data: webDataType;
+  setData: React.Dispatch < React.SetStateAction<webDataType> >;
 }) => {
-  const {username, token} = data;
+  const {username} = data;
   const auth = username !== "" && username !== "AnonymousUser";
   // const history = useHistory();
   return (<nav className="navbar navbar-light bg-secondary">
@@ -34,14 +34,6 @@ const Navbar = ({data} : {
         </div>
       </div>
     </div>
-    <div>
-      {/* <button className="btn btn-danger" onClick={() => {
-          console.log(history);
-        }}>
-        Click to check history.
-      </button> */
-      }
-    </div>
 
     <div className="mx-1 d-flex flex-row">
       {
@@ -51,7 +43,7 @@ const Navbar = ({data} : {
       }
       <div className="mx-1 d-flex flex-column">
         <Clock/>
-        <LoginButton logined={auth} token={token}/>
+        <LoginButton data={data} setData={setData}/>
       </div>
     </div>
   </nav>);

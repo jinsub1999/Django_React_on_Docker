@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import ensure_csrf_cookie
 from .forms import UserForm, UserLoginForm
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -33,10 +33,11 @@ def login(req):
             user = authenticate(req, username=username, password=password)
             if user is not None:
                 auth_login(req, user)
-                return redirect(req.headers["Origin"])
+                return HttpResponse("OK")
             else:
-                errMsg += "?usernotfoundERR=존재하지 않는 사용자이거나 비밀번호가 틀렸습니다."
-                return redirect(req.headers["Origin"] + "/login" + errMsg)
+                ret = {"errs": [{"errName": "usernotfoundERR",
+                                 "errDescription": "존재하지 않는 사용자이거나 비밀번호가 틀렸습니다."}]}
+                return JsonResponse(data=ret)
         else:
             errMsg += "?"
             for (k, v) in form.errors.as_data().items():
@@ -55,7 +56,7 @@ def login(req):
 def logout(req):
     if req.method == "POST":
         auth_logout(req)
-        return redirect(req.headers["Origin"])
+        return HttpResponse("LOGOUT")
     else:
         return HttpResponse("Error. Wrong request method ({0}). Use POST.".format(req.method))
 
@@ -63,28 +64,26 @@ def logout(req):
 def signup(req):
     if req.method == "POST":
         form = UserForm(req.POST)
-        errMsg = ""
         if form.is_valid():
             form.save(commit=False)
             username = form.cleaned_data['username']
             raw_password = form.cleaned_data['password1']
             if len(User.objects.filter(username=username)):
-                errMsg += "?usernameSIGNUPERR=이미 존재하는 아이디입니다."
+                ret = {"errs": [{"errName": "usernameSIGNUPERR",
+                                 "errDescription": "{0}은(는) 이미 존재하는 아이디입니다.".format(username)}]}
+                return JsonResponse(data=ret)
             else:
                 form.save()
                 user = authenticate(username=username, password=raw_password)
                 auth_login(req, user)
-                return redirect(req.headers["Origin"])
+                return HttpResponse("SIGNUP")
 
         else:
-            errMsg += "?"
+            ret = {"errs": []}
             for (k, v) in form.errors.as_data().items():
-                print(k, v)
                 for (idx, _v) in enumerate(v):
-                    errMsg += "{0}{1}={2}&".format(
-                        k, "SIGNUPERR", _v.messages[0])
-        if errMsg.endswith("&"):
-            errMsg = errMsg[:-1]
-        return redirect(req.headers["Origin"] + "/signup" + errMsg)
+                    ret["errs"].append(
+                        {"errName": k+"SIGNUPERR", "errDescription": _v.message})
+            return JsonResponse(data=ret)
     else:
         return HttpResponse("Error. Wrong request method ({0}). Use POST.".format(req.method))

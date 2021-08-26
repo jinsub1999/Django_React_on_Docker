@@ -3,10 +3,10 @@ import React from "react";
 import {useState} from "react";
 import {useEffect} from "react";
 import {useParams} from "react-router-dom";
-import {pList as pd} from "./ProductList";
+import {productT} from "../types/types";
 
 const ProductDetail = () => {
-  const [data, setData] = useState<pd>({id: -1, name: "", price: -1, description: "", added_date: "0"});
+  const [data, setData] = useState<productT>({id: -1, name: "", price: -1, description: "", added_date: "0"});
   const [err, setErr] = useState<Boolean>(false);
   const {id} : {
     id: string;

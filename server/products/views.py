@@ -14,8 +14,6 @@ def index(req):
         getResponse = HttpResponse()
         return getResponse
     elif req.method == "POST":
-        origin = req.headers["Origin"]
-        origin += "/products?"
         form = ProductForm(req.POST)
         if form.is_valid():
             prod = form.save(commit=False)
@@ -25,16 +23,10 @@ def index(req):
 
         else:
             ret = {"errs": []}
-            errOrigin: str = origin
             for (k, v) in form.errors.as_data().items():
                 for (idx, _v) in enumerate(v):
                     ret["errs"].append(
                         {"errName": k+"ERR", "errDescription": _v.message})
-                    errOrigin += "{0}{1}={2}&".format(
-                        k, "ERR",
-                        _v.message.encode("utf8").decode("utf8"))
-            if errOrigin.endswith("&"):
-                errOrigin = errOrigin[:-1]
             return JsonResponse(data=ret)
 
     else:
@@ -43,7 +35,6 @@ def index(req):
 
 
 def detail(req, product_id):
-
     if req.method == "GET":
         elem = get_object_or_404(Product, pk=product_id)
         ret = {
@@ -55,6 +46,9 @@ def detail(req, product_id):
                 "added_date": elem.added_date,
             }
         }
+        if elem.modded_date is not None:
+            ret["data"]["modded_date"] = elem.modded_date
+        print(ret)
         return JsonResponse(data=ret)
     else:
         return HttpResponse("Request Method is not GET.")
@@ -71,6 +65,8 @@ def productList(req):
                 "description": elem.description,
                 "added_date": elem.added_date,
             }
+            if elem.modded_date is not None:
+                d["modded_date"] = elem.modded_date
             ret["data"].append(d)
         return JsonResponse(data=ret)
     else:
@@ -82,5 +78,30 @@ def productRemove(req, product_id):
         elem = get_object_or_404(Product, pk=product_id)
         ret = elem.delete()
         return HttpResponse("Deleted")
+    else:
+        return HttpResponse("Request Method is not POST.")
+
+
+def productModify(req, product_id):
+    if req.method == "POST":
+        form = ProductForm(req.POST)
+        if form.is_valid():
+            originProduct = get_object_or_404(Product, pk=product_id)
+            postDict: dict = req.POST.dict()
+            originProduct.description = postDict['description']
+            originProduct.name = postDict['name']
+            originProduct.price = postDict['price']
+            originProduct.modded_date = timezone.now()
+            originProduct.save()
+            return HttpResponse("Modified")
+
+        else:
+            ret = {"errs": []}
+            for (k, v) in form.errors.as_data().items():
+                for (idx, _v) in enumerate(v):
+                    ret["errs"].append(
+                        {"errName": k+"ERR", "errDescription": _v.message})
+            return JsonResponse(data=ret)
+
     else:
         return HttpResponse("Request Method is not POST.")
