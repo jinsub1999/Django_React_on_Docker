@@ -1,5 +1,9 @@
 # Django + MySQL with React.js (and Docker)
 
+## About this project
+
+Using React.js to create client-side (front-end) views and Django & MySQL to managing Products and User model. For styling my homepage, I use [Bootstrap 5][3]. I created server-side components on Docker container. However, you can also run server in local in this project by [this method](#runlocal).
+
 ## Getting Started
 
 ### Prerequisites
@@ -19,7 +23,7 @@
 
    2-1. If you have problem running docker container in Windows, make sure <code>docker-entrypoint.sh</code> has LF EOL, not CRLF EOL.
 
-   2-2. If you want run in local Django-MySQL server, create file <code>.env.local</code> in project and add <code>DEBUG__ON_LOCAL=True</code>.
+   2-2.<span id="runlocal"> If you want run in local Django-MySQL server, create file</span> <code>.env.local</code> in project and add <code>DEBUG__ON_LOCAL=True</code>.
 
 3. use command in **/frontend** <code>yarn</code> to install react-related packages.
 
@@ -29,11 +33,28 @@
 
 <!-- end of list -->
 
+## License
+
+Distributed under the MIT License.
+
+## Contributing
+
+1. Fork this project.
+2. Create your own branch and make your features.
+3. Push to that branch and open a pull request.
+
+## Contact
+
+E-mail : jinsub1999@khu.ac.kr
+
 ## TODO
 
 - [ ] Change some form-submit into button-onClick. (to prevent re-render on Django redirect.)
-- [x] Change some HttpResponse to JsonResponse in product_view.py.
 - [ ] Change some form to axios post method to remove CSRFInput component.
+- [ ] Add upvote, downvote.
+- [ ] Add filter on ProductList.
 
 [1]: https://www.docker.com/get-started
 [2]: https://yarnpkg.com/getting-started/install
+[3]: https://getbootstrap.com/docs/5.1/getting-started/introduction/
+
