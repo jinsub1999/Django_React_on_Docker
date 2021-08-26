@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dockerize -wait tcp://db:3306 -timeout 25s
+dockerize -wait tcp://db:3306 -timeout 40s
 
 python ./manage.py makemigrations
 python ./manage.py migrate
