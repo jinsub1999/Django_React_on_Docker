@@ -1,23 +1,24 @@
 import axios from "axios";
 import React, {useState} from "react";
-import CSRFinput from "../CSRFInput";
-import ErrorMsg from "../ErrorMsg";
+import {useLocation, useParams} from "react-router-dom";
+import {ErrorListMsg} from "../ErrorMsg";
+import {FormError} from "../types/types";
 
 const ProductForm = ({token, setChange} : {
   token: string;
   setChange: React.Dispatch < React.SetStateAction<boolean> >;
 }) => {
+  const [err, setErr] = useState<FormError[]>([]);
   const [data, setData] = useState({name: "", price: 0, description: ""});
   const ChangeData = (e : |React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     setData({
       ...data,
       [e.target.name]: e.target.value
     });
-    console.log(data);
   };
 
   return (<div className="m-3">
-    <ErrorMsg/>
+    <ErrorListMsg errs={err}/>
     <div className="form-group m-3">
       <label htmlFor="name">Product name</label>
       <div className="col-sm-10">
@@ -57,11 +58,12 @@ const ProductForm = ({token, setChange} : {
             return res;
           };
           addProduct().then((res) => {
-            if (res == "NOT OK") {
-              console.error("NOT OK");
+            if (res !== "OK") {
+              setErr(res.errs);
             } else {
               setChange((c) => !c);
               setData({name: "", price: 0, description: ""});
+              setErr([]);
             }
           });
         }}>

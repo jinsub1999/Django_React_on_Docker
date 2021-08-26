@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import ensure_csrf_cookie
 from .forms import UserForm, UserLoginForm
 from django.http.response import HttpResponse
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -8,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 # Create your views here.
 
 
+@ensure_csrf_cookie
 def get_csrf(req):
     if req.method == "GET":
         return HttpResponse()

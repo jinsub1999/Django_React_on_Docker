@@ -24,15 +24,18 @@ def index(req):
             return HttpResponse("OK")
 
         else:
+            ret = {"errs": []}
             errOrigin: str = origin
             for (k, v) in form.errors.as_data().items():
                 for (idx, _v) in enumerate(v):
+                    ret["errs"].append(
+                        {"errName": k+"ERR", "errDescription": _v.message})
                     errOrigin += "{0}{1}={2}&".format(
                         k, "ERR",
                         _v.message.encode("utf8").decode("utf8"))
             if errOrigin.endswith("&"):
                 errOrigin = errOrigin[:-1]
-            return HttpResponse("NOT OK")
+            return JsonResponse(data=ret)
 
     else:
         print("??? / ", timezone.now())

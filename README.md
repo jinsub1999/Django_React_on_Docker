@@ -30,7 +30,8 @@
 ## TODO
 
 - [ ] Change some form-submit into button-onClick. (to prevent re-render on Django redirect.)
-- [ ] Change some HttpResponse to JsonResponse in product_view.py.
+- [x] Change some HttpResponse to JsonResponse in product_view.py.
+- [ ] Change some form to axios post method to remove CSRFInput component.
 
 [1]: https://www.docker.com/get-started
 [2]: https://yarnpkg.com/getting-started/install

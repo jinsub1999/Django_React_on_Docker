@@ -45,7 +45,6 @@ function App() {
   }, []);
   return (<div className="App">
     <Navbar data={webData}/>
-
     <Route exact={true} path="/">
       <div className="p-3">
         <ul className="list-group">
@@ -61,7 +60,6 @@ function App() {
     <Route path="/products/:id">
       <ProductDetail/>
     </Route>
-
     <Route path="/login">
       <LoginForm data={webData}/>
     </Route>

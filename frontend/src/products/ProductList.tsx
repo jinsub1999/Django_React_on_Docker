@@ -18,7 +18,6 @@ const ProductList = ({token, checkChange, setChange} : {
   setChange: React.Dispatch < React.SetStateAction<boolean> >;
 }) => {
   const [data, setData] = useState<pList[]>([]);
-  const his = useHistory();
   useEffect(() => {
     async function getProductList() {
       try {
@@ -53,10 +52,10 @@ const ProductList = ({token, checkChange, setChange} : {
             </div>
             <div>
               <div className="d-flex justify-content-end w-100">
-                <Link className="btn btn-primary me-3" to={`/products/${val.id}`}>
+                <Link className="btn btn-primary me-3 btn-sm" to={`/products/${val.id}`}>
                   이동
                 </Link>
-                <button className="btn btn-danger" onClick={() => {
+                <button className="btn btn-danger btn-sm" onClick={() => {
                     const delProduct = async () => {
                       const res = await axios({
                         headers: {},
