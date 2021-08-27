@@ -25,7 +25,6 @@ def get_user(req):
 def login(req):
     if req.method == "POST":
         form = UserLoginForm(req.POST)
-        errMsg = ""
         if form.is_valid():
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
@@ -39,15 +38,12 @@ def login(req):
                                  "errDescription": "존재하지 않는 사용자이거나 비밀번호가 틀렸습니다."}]}
                 return JsonResponse(data=ret)
         else:
-            errMsg += "?"
+            ret = {"errs": []}
             for (k, v) in form.errors.as_data().items():
                 for (idx, _v) in enumerate(v):
-                    errMsg += "{0}{1}={2}&".format(
-                        k, "ERR",
-                        _v.message.encode("utf8").decode("utf8"))
-        if errMsg.endswith("&"):
-            errMsg = errMsg[:-1]
-        return redirect(req.headers["Origin"] + "/login" + errMsg)
+                    ret["errs"].append(
+                        {"errName": k+"ERR", "errDescription": _v.message})
+            return JsonResponse(data=ret)
     else:
         return HttpResponse("{0}".format(req.user))
 

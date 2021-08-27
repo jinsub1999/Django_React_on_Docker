@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import Clock from "./Clock";
+import Clock from "./modules/Clock";
 import logo from "./images/logo.svg";
 import {webDataType} from "./types/types";
 import LoginButton from "./userComponent/LoginButton";

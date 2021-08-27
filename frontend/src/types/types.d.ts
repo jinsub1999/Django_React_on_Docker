@@ -35,5 +35,14 @@ type MutableComponentParams = {
   setChange: React.Dispatch < React.SetStateAction<boolean> >;
   productItem?: productT;
 };
+export type DateParams = {
+  date: Date;
+  Y?: boolean;
+  M?: boolean;
+  D?: boolean;
+  h?: boolean;
+  m?: boolean;
+  s?: boolean;
+};
 
 export type MCP = MutableComponentParams;

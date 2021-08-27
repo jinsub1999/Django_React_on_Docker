@@ -2,20 +2,47 @@ import axios from "axios";
 import React from "react";
 import {useState} from "react";
 import {Link, useHistory} from "react-router-dom";
-import {ErrorListMsg} from "../ErrorMsg";
-import {FormError} from "../types/types";
+import {ErrorListMsg} from "../modules/ErrorMsg";
+import {FormError, MCP, webDataType} from "../types/types";
 
-const SignupForm = () => {
+const SignupForm = ({data, setData} : {
+  data: webDataType;
+  setData: React.Dispatch < React.SetStateAction<webDataType> >;
+}) => {
   const [signupData, setSignupData] = useState({username: "", password1: "", password2: ""});
   const [errs, setErrs] = useState<FormError[]>([]);
   const hist = useHistory();
-
+  const signupPOST = () => {
+    const SignupAttempt = async () => {
+      const reqq = new FormData();
+      reqq.set("username", signupData.username);
+      reqq.set("password1", signupData.password1);
+      reqq.set("password2", signupData.password2);
+      const res = await axios({data: reqq, method: "POST", url: `http://localhost:8000/common/signup/`}).then((res) => res.data);
+      return res;
+    };
+    SignupAttempt().then((res) => {
+      if (res !== "SIGNUP") {
+        setSignupData({
+          ...signupData,
+          password1: "",
+          password2: ""
+        });
+        setErrs(res.errs);
+      } else {
+        setData({
+          ...data,
+          username: signupData.username
+        });
+        hist.push("/");
+      }
+    });
+  };
   const onChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSignupData({
       ...signupData,
       [e.target.name]: e.target.value
     });
-    console.log(signupData);
   };
   return (<div>
     <div className="m-3">
@@ -36,26 +63,14 @@ const SignupForm = () => {
         <label htmlFor="password2" className="form-label">
           Password (Type again)
         </label>
-        <input className="form-control" value={signupData.password2} onChange={onChange} name="password2" type="password"></input>
+        <input className="form-control" value={signupData.password2} onChange={onChange} name="password2" type="password" onKeyPress={event => {
+            if (event.key === "Enter") {
+              signupPOST();
+            }
+          }}></input>
       </div>
       <div className="form-group d-flex align-items-center">
-        <button className="btn btn-primary me-2" onClick={() => {
-            const SignupAttempt = async () => {
-              const reqq = new FormData();
-              reqq.set("username", signupData.username);
-              reqq.set("password1", signupData.password1);
-              reqq.set("password2", signupData.password2);
-              const res = await axios({headers: {}, data: reqq, method: "POST", url: `http://localhost:8000/common/signup/`}).then((res) => res.data);
-              return res;
-            };
-            SignupAttempt().then((res) => {
-              if (res !== "SIGNUP") {
-                setErrs(res.errs);
-              } else {
-                hist.push("/");
-              }
-            });
-          }}>
+        <button className="btn btn-primary me-2" onClick={signupPOST}>
           SIGN UP
         </button>
         or

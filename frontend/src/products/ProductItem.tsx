@@ -1,7 +1,10 @@
 import axios from "axios";
 import React from "react";
-import {Link} from "react-router-dom";
-import {MCP} from "../types/types";
+import {useEffect} from "react";
+import {useState} from "react";
+import {Link, useHistory, useParams} from "react-router-dom";
+import {dateStringKor} from "../modules/DateRelated";
+import {MCP, productT} from "../types/types";
 
 const ProductItemButtons = ({checkChange, setChange, productItem} : MCP) => {
   return (<div className="d-flex justify-content-end w-100">
@@ -71,5 +74,72 @@ const ProductItem = ({checkChange, setChange, productItem} : MCP) => {
     </span>
   </li>);
 };
+const ProductDetail = () => {
+  const [data, setData] = useState<productT>({id: -1, name: "", price: -1, description: "", added_date: "0"});
+  const [err, setErr] = useState<Boolean>(false);
+  const hist = useHistory();
+  const {id} : {
+    id: string;
+  } = useParams();
+  useEffect(() => {
+    const getProductData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8000/products/${id}`).then((res) => res.data).catch();
+        setData(res.data);
+      } catch (e) {
+        console.error(e);
+        setErr(true);
+      }
+    };
 
+    getProductData();
+  }, [id]);
+  const addDate = new Date(data.added_date);
+  const modDate = data.modded_date
+    ? new Date(data.modded_date)
+    : undefined;
+  return (<div className="container m-2">
+    {
+      err
+        ? (<div>ERR</div>)
+        : (<div>
+          <button className="btn btn-primary" onClick={() => {
+              hist.goBack();
+            }}>
+            뒤로 가기
+          </button>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>제품명</th>
+                <th>제품 가격</th>
+                <th>제품 추가일시</th>
+                {modDate && <th>제품정보 수정일시</th>}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{data.name}</td>
+                <td>{data.price}</td>
+                <td>
+                  {dateStringKor({date: addDate, Y: true, M: true, D: true, h: true})}
+                </td>
+                {
+                  modDate && (<td>
+                    {dateStringKor({date: modDate, Y: true, M: true, D: true, h: true})}
+                  </td>)
+                }
+              </tr>
+            </tbody>
+            <td></td>
+          </table>
+
+          <div className="bg-secondary rounded p-3">{data.description}</div>
+        </div>)
+    }
+  </div>);
+};
 export default ProductItem;
+export {
+  ProductDetail
+};

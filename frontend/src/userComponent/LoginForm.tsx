@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import {useState} from "react";
 import {Link, useHistory} from "react-router-dom";
-import {ErrorListMsg} from "../ErrorMsg";
+import {ErrorListMsg} from "../modules/ErrorMsg";
 import {FormError, webDataType} from "../types/types";
 
 const LoginForm = ({data, setData} : {
@@ -12,6 +12,30 @@ const LoginForm = ({data, setData} : {
   const [loginData, setLoginData] = useState({username: "", password: ""});
   const [errs, setErrs] = useState<FormError[]>([]);
   const hist = useHistory();
+  const loginPOST = () => {
+    const LoginAttempt = async () => {
+      const reqq = new FormData();
+      reqq.set("username", loginData.username);
+      reqq.set("password", loginData.password);
+      const res = await axios({data: reqq, method: "POST", url: `http://localhost:8000/common/login/`}).then((res) => res.data);
+      return res;
+    };
+    LoginAttempt().then((res) => {
+      if (res !== "OK") {
+        setErrs(res.errs);
+        setLoginData({
+          ...loginData,
+          password: ""
+        });
+      } else {
+        setData({
+          ...data,
+          username: loginData.username
+        });
+        hist.push("/");
+      }
+    });
+  };
   const onChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({
       ...loginData,
@@ -31,33 +55,14 @@ const LoginForm = ({data, setData} : {
         <label htmlFor="password" className="form-label">
           Password
         </label>
-        <input className="form-control" name="password" value={loginData.password} onChange={onChange} type="password"></input>
+        <input className="form-control" name="password" value={loginData.password} onChange={onChange} type="password" onKeyPress={event => {
+            if (event.key === "Enter") {
+              loginPOST();
+            }
+          }}></input>
       </div>
       <div className="form-group d-flex align-items-center">
-        <button className="btn btn-primary me-2" onClick={() => {
-            const LoginAttempt = async () => {
-              const reqq = new FormData();
-              reqq.set("username", loginData.username);
-              reqq.set("password", loginData.password);
-              const res = await axios({headers: {}, data: reqq, method: "POST", url: `http://localhost:8000/common/login/`}).then((res) => res.data);
-              return res;
-            };
-            LoginAttempt().then((res) => {
-              if (res !== "OK") {
-                setErrs(res.errs);
-                setLoginData({
-                  ...loginData,
-                  password: ""
-                });
-              } else {
-                setData({
-                  ...data,
-                  username: loginData.username
-                });
-                hist.push("/");
-              }
-            });
-          }}>
+        <button className="btn btn-primary me-2" onClick={loginPOST}>
           LOGIN
         </button>
         or

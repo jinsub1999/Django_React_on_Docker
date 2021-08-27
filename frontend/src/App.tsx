@@ -3,7 +3,6 @@ import axios from "axios";
 import {useState} from "react";
 import Navbar from "./NavBar";
 import {Route} from "react-router-dom";
-import ProductDetail from "./products/ProductDetail";
 import ProductPage from "./products/ProductPage";
 import LoginForm from "./userComponent/LoginForm";
 import {useEffect} from "react";
@@ -11,6 +10,7 @@ import {Cookies} from "react-cookie";
 import SignupForm from "./userComponent/SignupForm";
 import {webDataType} from "./types/types";
 import {ProductModifyForm} from "./products/ProductForm";
+import {ProductDetail} from "./products/ProductItem";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -64,14 +64,14 @@ function App() {
     <Route path="/products/:id" exact={true}>
       <ProductDetail/>
     </Route>
-    <Route exact={true} path="/products/modify/:id">
+    <Route path="/products/modify/:id" exact={true}>
       <ProductModifyForm checkChange={checkChange} setChange={setChange}/>
     </Route>
     <Route path="/login">
       <LoginForm data={webData} setData={setWebData}/>
     </Route>
     <Route path="/signup">
-      <SignupForm/>
+      <SignupForm data={webData} setData={setWebData}/>
     </Route>
     <Route path="/info">
       <div className="p-3">

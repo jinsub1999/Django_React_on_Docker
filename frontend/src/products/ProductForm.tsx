@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {useState} from "react";
 import {useEffect} from "react";
 import {useHistory, useParams} from "react-router-dom";
-import {ErrorListMsg} from "../ErrorMsg";
+import {ErrorListMsg} from "../modules/ErrorMsg";
 import {FormError, MCP, productT} from "../types/types";
 
 const ProductModifyForm = ({checkChange, setChange} : MCP) => {

@@ -9,7 +9,7 @@ class Product(models.Model):
     price = models.IntegerField()
     description = models.TextField()
     added_date = models.DateTimeField()
-    modded_date = models.DateTimeField(null=True)
+    modded_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return "{0}".format(self.name)

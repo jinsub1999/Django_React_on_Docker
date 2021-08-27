@@ -8,15 +8,16 @@ const ProductPage = () => {
   const [checkChange, setCheckChange] = useState(false);
 
   return (<div className="container">
-    <div>
+    <ProductList setChange={setCheckChange} checkChange={checkChange} hidden={hidden}/>
+
+    <div className="container border border-info rounded position-relative p-3 m-1 mx-3">
+      <div className="position-absolute bg-white fw-bold" style={{
+          top: -13
+        }}>
+        Submit your product!
+      </div>
       <ProductForm checkChange={checkChange} setChange={setCheckChange}/>
     </div>
-    <button className="btn btn-secondary mx-3" onClick={() => {
-        setHidden(!hidden);
-      }}>
-      ProductList
-    </button>
-    <ProductList setChange={setCheckChange} checkChange={checkChange} hidden={hidden}/>
   </div>);
 };
 

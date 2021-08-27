@@ -1,6 +1,6 @@
 import React from "react";
 import {useLocation} from "react-router-dom";
-import {errkind, FormError} from "./types/types";
+import {errkind, FormError} from "../types/types";
 const errDict: errkind = {
   nameERR: "제품 이름",
   priceERR: "제품 가격",
@@ -53,9 +53,9 @@ const ErrorListMsg = ({errs} : {
   });
   return (<div hidden={count.length === 0} className="alert alert-danger" role="alert">
     {
-      errs.map((val) => {
+      errs.map((val, idx) => {
         if (val.errName) 
-          return (<div key={val.errName}>
+          return (<div key={val.errName + `_${idx}`}>
             {val.errName}: {val.errDescription}
           </div>);
         else 
