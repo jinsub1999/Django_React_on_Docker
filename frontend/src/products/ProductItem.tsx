@@ -8,13 +8,28 @@ import serverRequest from "../modules/ServerRelated";
 import {MCP, productT, voteInfo, voteValue} from "../types/types";
 
 const ProductItemButtons = ({checkChange, setChange, productItem} : MCP) => {
+  const hist = useHistory();
   return (<div className="d-flex justify-content-end w-100">
     <Link className="btn btn-primary me-2 btn-sm" to={`/products/${productItem !.id}`}>
       자세히
     </Link>
-    <Link className="btn btn-dark ms-1 me-1 btn-sm" to={`/products/modify/${productItem !.id}`}>
+    <button className="btn btn-dark ms-1 me-1 btn-sm" onClick={() => {
+        serverRequest({
+          url: `http://localhost:8000/products/modify/${productItem !.id}/`,
+          method: "GET"
+        }).then((res) => {
+          if (res === "OK") {
+            hist.push(`/products/modify/${productItem !.id}`);
+          } else if (res === "Login required") {
+            alert("로그인이 필요한 기능입니다.");
+            hist.push("/login");
+          } else if (res === "Different user") {
+            alert("작성자만 수정할 수 있습니다.");
+          }
+        });
+      }}>
       수정
-    </Link>
+    </button>
     <button className="btn btn-danger ms-2 btn-sm" onClick={() => {
         const delProduct = async () => {
           const res = await axios({
@@ -27,7 +42,11 @@ const ProductItemButtons = ({checkChange, setChange, productItem} : MCP) => {
         delProduct().then((res) => {
           if (res === "Deleted") {
             setChange((checkChange) => !checkChange);
-            console.log("deleted");
+          } else if (res === "Login required") {
+            alert("로그인이 필요한 기능입니다.");
+            hist.push("/login");
+          } else if (res === "Different user") {
+            alert("작성자만 삭제할 수 있습니다.");
           }
         });
       }}>

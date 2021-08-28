@@ -88,15 +88,10 @@ def productList(req):
         for elem in get_list_or_404(Product.objects.order_by("-added_date")):
             d = elem.getNonNullValDict()
             if req.user.is_authenticated:
-                if elem.upvotes.filter(pk=req.user.id).count():
-                    d["upvoted"] = True
-                else:
-                    d["upvoted"] = False
-
-                if elem.downvotes.filter(pk=req.user.id).count():
-                    d["downvoted"] = True
-                else:
-                    d["downvoted"] = False
+                d["upvoted"] = True if elem.upvotes.filter(
+                    pk=req.user.id).count() else False
+                d["downvoted"] = True if elem.downvotes.filter(
+                    pk=req.user.id).count() else False
             d["author_name"] = elem.author.username
             ret["data"].append(d)
         return JsonResponse(data=ret)
@@ -106,7 +101,12 @@ def productList(req):
 
 def productRemove(req, product_id):
     if req.method == "POST":
+        if not req.user.is_authenticated:
+            return HttpResponse("Login required")
+
         elem = get_object_or_404(Product, pk=product_id)
+        if req.user != elem.author:
+            return HttpResponse("Different user")
         ret = elem.delete()
         return HttpResponse("Deleted")
     else:
@@ -114,7 +114,16 @@ def productRemove(req, product_id):
 
 
 def productModify(req, product_id):
-    if req.method == "POST":
+    if req.method == "GET":
+        if not req.user.is_authenticated:
+            return HttpResponse("Login required")
+
+        elem = get_object_or_404(Product, pk=product_id)
+        if req.user != elem.author:
+            return HttpResponse("Different user")
+        return HttpResponse("OK")
+
+    elif req.method == "POST":
         form = ProductForm(req.POST)
         if form.is_valid():
             originProduct = get_object_or_404(Product, pk=product_id)
@@ -135,4 +144,4 @@ def productModify(req, product_id):
             return JsonResponse(data=ret)
 
     else:
-        return HttpResponse("Request Method is not POST.")
+        return HttpResponse("Request Method is not (GET, POST).")
