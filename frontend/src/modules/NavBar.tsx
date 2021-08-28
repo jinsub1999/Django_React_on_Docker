@@ -1,10 +1,10 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import Clock from "./modules/Clock";
-import logo from "./images/logo.svg";
-import {webDataType} from "./types/types";
-import LoginButton from "./userComponent/LoginButton";
-import UserInfo from "./userComponent/UserInfo";
+import Clock from "./Clock";
+import logo from "../images/logo.svg";
+import {webDataType} from "../types/types";
+import LoginButton from "../userComponent/LoginButton";
+import UserInfo from "../userComponent/UserInfo";
 
 const Navbar = ({data, setData} : {
   data: webDataType;

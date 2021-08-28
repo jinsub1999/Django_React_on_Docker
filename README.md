@@ -50,9 +50,11 @@ E-mail : jinsub1999@khu.ac.kr
 ## TODO
 
 - [ ] Change some form-submit into button-onClick. (to prevent re-render on Django redirect.)
-- [ ] Change some form to axios post method to remove CSRFInput component.
-- [ ] Add upvote, downvote.
+- [x] Change some form to axios post method to remove CSRFInput component.
+- [x] Add upvote, downvote.
 - [ ] Add filter on ProductList.
+- [ ] Add some feature in productDetail (ex. Review)
+- [ ] Add userProfile.
 
 [1]: https://www.docker.com/get-started
 [2]: https://yarnpkg.com/getting-started/install
