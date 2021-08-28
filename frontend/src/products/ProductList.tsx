@@ -16,9 +16,9 @@ const ProductList = ({checkChange, setChange, hidden} : {
   useEffect(() => {
     async function getProductList() {
       try {
-        const result = await axios.get("http://localhost:8000/products/productList/").then((res) => res.data.data);
-        setData(result);
-        return result;
+        const result = await axios.get("http://localhost:8000/products/productList/").then((res) => res.data);
+        setData(result.data);
+        return result.data;
       } catch (e) {
         console.error(e);
       }
@@ -43,9 +43,7 @@ const ProductList = ({checkChange, setChange, hidden} : {
   };
 
   return (<div className="container min-vw-50 p-3">
-    {console.log("rendered")}
     <ul className="list-group" hidden={hidden}>
-      {/* {data.map((val) => (<ProductItem key={val.id} checkChange={checkChange} setChange={setChange} productItem={val}/>))} */}
       {displaying.map((val) => (<ProductItem key={val.id} checkChange={checkChange} setChange={setChange} productItem={val}/>))}
     </ul>
 

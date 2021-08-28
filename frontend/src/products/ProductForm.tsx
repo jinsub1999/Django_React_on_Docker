@@ -85,6 +85,7 @@ const ProductModifyForm = ({checkChange, setChange} : MCP) => {
 const ProductForm = ({checkChange, setChange} : MCP) => {
   const [err, setErr] = useState<FormError[]>([]);
   const [data, setData] = useState({name: "", price: 0, description: ""});
+  const hist = useHistory();
   const ChangeData = (e : |React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     setData({
       ...data,
@@ -125,13 +126,16 @@ const ProductForm = ({checkChange, setChange} : MCP) => {
             return res;
           };
           addProduct().then((res) => {
-            if (res !== "OK") {
-              setErr(res.errs);
-            } else {
+            if (res === "OK") {
               if (setChange !== undefined) 
                 setChange((c) => !c);
               setData({name: "", price: 0, description: ""});
               setErr([]);
+            } else if (res === "Login Required") {
+              alert("로그인이 필요한 기능입니다.");
+              hist.push("/login");
+            } else {
+              setErr(res.errs);
             }
           });
         }}>

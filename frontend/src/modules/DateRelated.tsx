@@ -1,4 +1,3 @@
-import React from "react";
 import {DateParams} from "../types/types";
 
 export const dateStringKor = (dp : DateParams) => {

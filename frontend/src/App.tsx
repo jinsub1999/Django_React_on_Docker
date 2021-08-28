@@ -12,6 +12,8 @@ import {webDataType} from "./types/types";
 import {ProductModifyForm} from "./products/ProductForm";
 import {ProductDetail} from "./products/ProductItem";
 
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;

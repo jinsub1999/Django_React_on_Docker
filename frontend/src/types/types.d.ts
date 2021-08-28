@@ -27,6 +27,11 @@ export type productT = {
   price: number;
   description: string;
   added_date: string;
+  upvotes: number;
+  downvotes: number;
+  author_name: string;
+  upvoted: boolean;
+  downvoted: boolean;
   modded_date?: string;
 };
 
@@ -35,6 +40,8 @@ type MutableComponentParams = {
   setChange: React.Dispatch < React.SetStateAction<boolean> >;
   productItem?: productT;
 };
+export type MCP = MutableComponentParams;
+
 export type DateParams = {
   date: Date;
   Y?: boolean;
@@ -44,5 +51,12 @@ export type DateParams = {
   m?: boolean;
   s?: boolean;
 };
-
-export type MCP = MutableComponentParams;
+export type voteValue = {
+  up: boolean;
+  down: boolean;
+};
+export type voteInfo = {
+  info: voteValue;
+  setInfo?: React.Dispatch < React.SetStateAction<vote_up_down> >;
+  productItem?: productT;
+};

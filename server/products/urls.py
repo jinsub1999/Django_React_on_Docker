@@ -9,4 +9,6 @@ urlpatterns = [
     path("modify/<int:product_id>/", views.productModify, name="productModify"),
     path("<int:product_id>/", views.detail, name="detail"),
     path("productList/", views.productList, name="productList"),
+    path("vote/<int:product_id>/<int:vote_val>/",
+         views.vote, name="productVote"),
 ]

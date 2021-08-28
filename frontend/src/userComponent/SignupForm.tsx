@@ -3,7 +3,7 @@ import React from "react";
 import {useState} from "react";
 import {Link, useHistory} from "react-router-dom";
 import {ErrorListMsg} from "../modules/ErrorMsg";
-import {FormError, MCP, webDataType} from "../types/types";
+import {FormError, webDataType} from "../types/types";
 
 const SignupForm = ({data, setData} : {
   data: webDataType;
