@@ -247,7 +247,6 @@ const ProductDetail = () => {
                 }
               </tr>
             </tbody>
-            <td></td>
           </table>
 
           <div className="border border-secondary rounded p-3">
