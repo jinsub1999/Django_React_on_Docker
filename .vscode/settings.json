@@ -4,7 +4,7 @@
     "editor.wordBasedSuggestions": false
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "Glavin001.unibeautify-vscode"
+    "editor.defaultFormatter":"vscode.typescript-language-features"
   },"[typescript]": {
     "editor.defaultFormatter": "Glavin001.unibeautify-vscode"
   },

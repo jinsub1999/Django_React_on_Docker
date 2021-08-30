@@ -1,10 +1,14 @@
-from django.views.decorators.csrf import ensure_csrf_cookie
-from .forms import UserForm, UserLoginForm
-from django.http.response import HttpResponse, JsonResponse
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.core.files import File
+from django.db.models import fields
+from django.db.models.fields.files import ImageField, ImageFieldFile
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.http.response import HttpResponse, JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
+from .forms import UserForm, UserLoginForm, UserCIUploadForm
+from .models import UserCustomizableInfo
 
 # Create your views here.
 
@@ -20,6 +24,33 @@ def get_csrf(req):
 def get_user(req):
     if req.method == "GET":
         return HttpResponse("{0}".format(req.user))
+
+
+def profile(req):
+    if req.method == "GET":
+        if not req.user.is_authenticated:
+            return HttpResponse("Login Required")
+        else:
+            userCI = get_object_or_404(UserCustomizableInfo, pk=req.user.id)
+            try:
+                return HttpResponse(userCI.profile_img.read(), content_type="image/*")
+            except:
+                with open("usrData/defaults/defaultimage.jpeg", "rb") as f:
+                    return HttpResponse(f.read(), content_type="image/*")
+    if req.method == "POST":
+        if not req.user.is_authenticated:
+            return HttpResponse("Login Required")
+        else:
+            form = UserCIUploadForm(files=req.FILES)
+            if form.is_valid():
+                usrCI = form.save(commit=False)
+                usrCI.usr = req.user
+                usrCI.save()
+                return HttpResponse("OK")
+
+            return HttpResponse("Form is not vaild")
+    else:
+        return HttpResponse("Wrong method.")
 
 
 def login(req):
@@ -42,13 +73,13 @@ def login(req):
             for (k, v) in form.errors.as_data().items():
                 for (idx, _v) in enumerate(v):
                     ret["errs"].append(
-                        {"errName": k+"ERR", "errDescription": _v.message})
+                        {"errName": k+"ERR", "errDescription": "{0}".format(_v)[2:-2]})
             return JsonResponse(data=ret)
     else:
         return HttpResponse("{0}".format(req.user))
 
 
-@login_required(login_url="http://localhost:3000/login")
+@ login_required(login_url="http://localhost:3000/login")
 def logout(req):
     if req.method == "POST":
         auth_logout(req)
@@ -71,6 +102,7 @@ def signup(req):
             else:
                 form.save()
                 user = authenticate(username=username, password=raw_password)
+                UserCustomizableInfo(usr=user).save()
                 auth_login(req, user)
                 return HttpResponse("SIGNUP")
 
@@ -79,7 +111,30 @@ def signup(req):
             for (k, v) in form.errors.as_data().items():
                 for (idx, _v) in enumerate(v):
                     ret["errs"].append(
-                        {"errName": k+"SIGNUPERR", "errDescription": _v.message})
+                        {"errName": k+"SIGNUPERR", "errDescription": "{0}".format(_v)[2:-2]})
+                    print(_v)
             return JsonResponse(data=ret)
+    else:
+        return HttpResponse("Error. Wrong request method ({0}). Use POST.".format(req.method))
+
+
+def getUserVote(req):
+    if req.method == "GET":
+        if not req.user.is_authenticated:
+            return HttpResponse("Login required")
+        ret = {"userUpvotes": [], "userDownvotes": []}
+        usr = req.user
+        for item in usr.product_upvotes.all():
+            d = item.getNonNullValDict()
+            d["author_name"] = item.author.username
+            ret["userUpvotes"].append(d)
+
+        for item in usr.product_downvotes.all():
+            d = item.getNonNullValDict()
+            d["author_name"] = item.author.username
+            ret["userDownvotes"].append(d)
+
+        return JsonResponse(data=ret)
+
     else:
         return HttpResponse("Error. Wrong request method ({0}). Use POST.".format(req.method))

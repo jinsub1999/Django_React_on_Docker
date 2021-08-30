@@ -30,7 +30,7 @@ def index(req):
             for (k, v) in form.errors.as_data().items():
                 for (idx, _v) in enumerate(v):
                     ret["errs"].append(
-                        {"errName": k+"ERR", "errDescription": _v.message})
+                        {"errName": k+"ERR", "errDescription": "{0}".format(_v)[2:-2]})
             return JsonResponse(data=ret)
 
     else:
@@ -41,7 +41,6 @@ def detail(req, product_id):
     if req.method == "GET":
         elem = get_object_or_404(Product, pk=product_id)
         elemDict = elem.getNonNullValDict()
-        print(elemDict)
         ret = {
             "data": elemDict
         }
@@ -140,7 +139,7 @@ def productModify(req, product_id):
             for (k, v) in form.errors.as_data().items():
                 for (idx, _v) in enumerate(v):
                     ret["errs"].append(
-                        {"errName": k+"ERR", "errDescription": _v.message})
+                        {"errName": k+"ERR", "errDescription": "{0}".format(_v)[2:-2]})
             return JsonResponse(data=ret)
 
     else:

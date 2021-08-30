@@ -12,7 +12,7 @@ server/**/local_settings.py
 server/**/db.sqlite3
 server/**/db.sqlite3-journal
 server/**/media
-
+server/usrData/user_*
 
 # React.js
 frontend/**/.DS_*

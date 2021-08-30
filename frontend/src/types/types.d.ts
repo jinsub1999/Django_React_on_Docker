@@ -2,7 +2,7 @@ import React from "react";
 
 export type webDataType = {
   username: string;
-  token: string;
+  userChanges: boolean;
 };
 export type FormError = {
   errName: string | null;
@@ -30,13 +30,13 @@ export type productT = {
   upvotes: number;
   downvotes: number;
   author_name: string;
-  upvoted: boolean;
-  downvoted: boolean;
+  upvoted?: boolean;
+  downvoted?: boolean;
   modded_date?: string;
 };
 
 type MutableComponentParams = {
-  checkChange: Boolean;
+  checkChange: boolean;
   setChange: React.Dispatch < React.SetStateAction<boolean> >;
   productItem?: productT;
 };
@@ -44,12 +44,12 @@ export type MCP = MutableComponentParams;
 
 export type DateParams = {
   date: Date;
-  Y?: boolean;
-  M?: boolean;
-  D?: boolean;
-  h?: boolean;
-  m?: boolean;
-  s?: boolean;
+  Y?: true;
+  M?: true;
+  D?: true;
+  h?: true;
+  m?: true;
+  s?: true;
 };
 export type voteValue = {
   up: boolean;

@@ -7,10 +7,10 @@ export const dateStringKor = (dp : DateParams) => {
     ? `${dp.date.getFullYear()}년 `
     : "";
   ret += dp.M
-    ? `${dp.date.getMonth()}월 `
+    ? `${dp.date.getMonth() + 1}월 `
     : "";
   ret += dp.D
-    ? `${dp.date.getDay()}일 `
+    ? `${dp.date.getDate()}일 `
     : "";
   ret += dp.h
     ? `${dp.date.getHours()}시 `
