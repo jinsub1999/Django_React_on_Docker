@@ -33,6 +33,10 @@ Using React.js to create client-side (front-end) views and Django & MySQL to man
 
 <!-- end of list -->
 
+## Features
+
+This website supports user related things via Django + MySQL. Users can save their images in Django server to change their profile images. Only logged-in users can submit and modify their own products. Users can also upvote or downvote to products.
+
 ## License
 
 Distributed under the MIT License.
@@ -49,12 +53,10 @@ E-mail : jinsub1999@khu.ac.kr
 
 ## TODO
 
-- [ ] Change some form-submit into button-onClick. (to prevent re-render on Django redirect.)
-- [x] Change some form to axios post method to remove CSRFInput component.
-- [x] Add upvote, downvote.
+- [x] Change some form-submit into button-onClick. (to prevent re-render on Django redirect.)
 - [ ] Add filter on ProductList.
 - [ ] Add some feature in productDetail (ex. Review)
-- [ ] Add userProfile.
+- [x] Add userProfile.
 
 [1]: https://www.docker.com/get-started
 [2]: https://yarnpkg.com/getting-started/install
