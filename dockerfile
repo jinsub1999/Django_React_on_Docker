@@ -9,6 +9,10 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 RUN apk update \
     && apk add --virtual build-deps gcc python3-dev musl-dev \
+    && apk add postgresql \
+    && apk add postgresql-dev \
+    && pip install psycopg2 \
+    && apk add jpeg-dev zlib-dev libjpeg \
     && apk add --no-cache mariadb-dev
 
 WORKDIR /back_end
