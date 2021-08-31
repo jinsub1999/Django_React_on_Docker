@@ -1,4 +1,4 @@
-import axios, { Method } from "axios";
+import axios, {Method} from "axios";
 
 type serverData = {
   method: Method;
@@ -7,12 +7,7 @@ type serverData = {
   formData?: FormData;
 };
 
-const serverRequest = async ({
-  url,
-  method,
-  formData,
-  headers
-}: serverData) => {
+const serverRequest = async ({url, method, formData, headers} : serverData) => {
   if (headers) {
     const res = await axios({
       method: method,
@@ -24,7 +19,6 @@ const serverRequest = async ({
     }).then((res) => res.data).catch((err) => {
       console.error(err);
     });
-    console.log(res)
     return res;
   } else {
     const res = await axios({

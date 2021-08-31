@@ -19,6 +19,7 @@ export type errkind = {
   usernameSIGNUPERR: "회원가입 아이디";
   password1SIGNUPERR: "회원가입 암호";
   password2SIGNUPERR: "회원가입 암호";
+  contentERR: "리뷰 내용";
 };
 
 export type productT = {
@@ -67,4 +68,16 @@ export type productListContent = {
   filters: string;
   displaying: productT[];
   data: productT[];
+};
+
+export type reviewContent = {
+  id: number;
+  content: string;
+  added_date: string;
+  upvotes: number;
+  downvotes: number;
+  author_name: string;
+  upvoted?: boolean;
+  downvoted?: boolean;
+  modded_date?: string;
 };

@@ -11,4 +11,8 @@ urlpatterns = [
     path("productList/", views.productList, name="productList"),
     path("vote/<int:product_id>/<int:vote_val>/",
          views.vote, name="productVote"),
+    path("review/<int:product_id>/",
+         views.productReview, name="productReview"),
+    path("review/<int:review_id>/<int:vote_val>/",
+         views.reviewVote, name="reviewVote"),
 ]

@@ -1,22 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Clock from "./Clock";
 import logo from "../images/logo.svg";
-import { MCP, webDataType } from "../types/types";
+import {webDataType} from "../types/types";
 import LoginButton from "../userComponent/LoginButton";
-import { UserNavInfo } from "../userComponent/UserInfo";
+import {UserNavInfo} from "../userComponent/UserInfo";
 
-const Navbar = ({ data, setData }: {
+const Navbar = ({data, setData} : {
   data: webDataType;
-  setData: React.Dispatch<React.SetStateAction<webDataType>>;
+  setData: React.Dispatch < React.SetStateAction<webDataType> >;
 }) => {
-  const { username } = data;
+  const {username} = data;
   const auth = username !== "" && username !== "AnonymousUser";
   // const history = useHistory();
   return (<nav className="navbar navbar-light bg-secondary">
     <div className="navbar">
       <Link to="/" className="navbar-brand mx-2">
-        <img src={logo} width="30" height="30" className="d-inline-block align-top mx-3 img-thumbnail" alt="" />
+        <img src={logo} width="30" height="30" className="d-inline-block align-top mx-3 img-thumbnail" alt=""/>
         Homepage
       </Link>
       <div className="navbar mx-2">
@@ -38,12 +38,12 @@ const Navbar = ({ data, setData }: {
     <div className="mx-1 d-md-flex flex-row">
       {
         auth
-          ? <UserNavInfo data={data} setData={setData} />
+          ? <UserNavInfo data={data} setData={setData}/>
           : ""
       }
       <div className="d-flex flex-column">
-        <Clock />
-        <LoginButton data={data} setData={setData} />
+        <Clock/>
+        <LoginButton data={data} setData={setData}/>
       </div>
     </div>
   </nav>);

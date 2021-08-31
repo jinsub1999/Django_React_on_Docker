@@ -1,110 +1,101 @@
 import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import axios from "axios";
-import { productT } from "../types/types";
+import {useEffect} from "react";
+import {useState} from "react";
+import {productT} from "../types/types";
 import ProductItem from "./ProductItem";
-import { MCP, productListContent } from "../types/types";
+import {MCP, productListContent} from "../types/types";
 import serverRequest from "../modules/ServerRelated";
 
-
-const ProductList = ({ checkChange, setChange, hidden }: {
-  hidden: boolean;
-} & MCP) => {
-  const [contents, setContents] = useState<productListContent>(
-    {
-      currPage: 1,
-      divider: 5,
-      filters: "추가 일시",
-      displaying: [],
-      data: [],
-    }
-  );
-  const { currPage, divider, data, filters, displaying } = contents;
-  const sorting = (fil: string) => {
-    console.log(fil);
-
-    if (fil == "추가 일시")
-      return (a: productT, b: productT) => {
-        if (new Date(a.added_date) > new Date(b.added_date))
+const ProductList = ({checkChange, setChange} : MCP) => {
+  const [contents, setContents] = useState<productListContent>({currPage: 1, divider: 5, filters: "추가 일시", displaying: [], data: []});
+  const {currPage, divider, data, filters, displaying} = contents;
+  const sorting = (fil : string) => {
+    if (fil === "추가 일시") 
+      return(a : productT, b : productT) => {
+        if (new Date(a.added_date) > new Date(b.added_date)) 
           return -1;
-        else
+        else 
           return 1;
-      }
-    else if (fil == "수정 일시")
-      return (a: productT, b: productT) => {
-        if (!a.modded_date && !b.modded_date)
+        }
+      ;
+    else if (fil === "수정 일시") 
+      return(a : productT, b : productT) => {
+        if (!a.modded_date && !b.modded_date) 
           return 0;
-        else if (!a.modded_date)
+        else if (!a.modded_date) 
           return 1;
-        else if (!b.modded_date)
+        else if (!b.modded_date) 
           return -1;
-        else if (new Date(a.modded_date) > new Date(b.modded_date))
+        else if (new Date(a.modded_date) > new Date(b.modded_date)) 
           return -1;
-        else
+        else 
           return 1;
-      }
-    else if (fil == "좋아요 순")
-      return (a: productT, b: productT) => {
-        if (a.upvotes > b.upvotes)
+        }
+      ;
+    else if (fil === "좋아요 순") 
+      return(a : productT, b : productT) => {
+        if (a.upvotes > b.upvotes) 
           return -1;
-        else
+        else 
           return 1;
-      }
-    else if (fil == "싫어요 순")
-      return (a: productT, b: productT) => {
-        if (a.downvotes > b.downvotes)
+        }
+      ;
+    else if (fil === "싫어요 순") 
+      return(a : productT, b : productT) => {
+        if (a.downvotes > b.downvotes) 
           return -1;
-        else
+        else 
           return 1;
-      }
-    else
-      return (a: productT, b: productT) => {
-        if (new Date(a.added_date) > new Date(b.added_date))
+        }
+      ;
+    else 
+      return(a : productT, b : productT) => {
+        if (new Date(a.added_date) > new Date(b.added_date)) 
           return 1;
-        else
+        else 
           return -1;
-      }
-  }
+        }
+      ;
+    }
+  ;
   useEffect(() => {
-    serverRequest({
-      url: "http://localhost:8000/products/productList/", method: "GET"
-    }).then(res => {
-      setContents(contents => ({
+    serverRequest({url: "http://localhost:8000/products/productList/", method: "GET"}).then((res) => {
+      setContents((contents) => ({
         ...contents,
         data: res.data,
         displaying: res.data.slice(0, Math.min(res.length, 5))
-      }))
-    })
+      }));
+    });
   }, [checkChange]);
   useEffect(() => {
-    setContents(contents => ({
+    setContents((contents) => ({
       ...contents,
       displaying: data.slice((currPage - 1) * divider, Math.min(data.length, currPage * divider))
-    }))
+    }));
   }, [currPage, divider, data]);
   useEffect(() => {
-    setContents(contents => ({
+    setContents((contents) => ({
       ...contents,
       data: data.sort(sorting(filters)),
       displaying: data.slice((currPage - 1) * divider, Math.min(data.length, currPage * divider)),
       currPage: 1
-    }))
-  }, [divider, filters, data]);
+    }));
+  }, [divider, filters, data, currPage]);
   const buttonsNum = Math.ceil(data.length / divider);
   const buttonsJSX = [];
-  for (let i = 0; i < buttonsNum; i++)
+  for (let i = 0; i < buttonsNum; i++) 
     buttonsJSX.push(i + 1);
-
-  const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  
+  const onChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
     setContents({
       ...contents,
-      [e.target.name]: typeof e.target.value === "number" ? parseInt(e.target.value) : e.target.value
-    })
+      [e.target.name]: typeof e.target.value === "number"
+        ? parseInt(e.target.value)
+        : e.target.value
+    });
   };
 
   return (<div className="container min-vw-50 p-3">
-
     <div className="bg-dark text-light rounded p-3 my-2">
       <div className="bg-secondary p-1 my-1 rounded">
         <label htmlFor="divider" className="form-label">
@@ -129,43 +120,43 @@ const ProductList = ({ checkChange, setChange, hidden }: {
         </select>
       </div>
     </div>
-    <ul className="list-group" hidden={hidden}>
-      {displaying.map((val) => (<ProductItem key={val.id} checkChange={checkChange} setChange={setChange} productItem={val} />))}
+    <ul className="list-group">
+      {displaying.map((val) => (<ProductItem key={val.id} checkChange={checkChange} setChange={setChange} productItem={val}/>))}
     </ul>
 
     <div className="mx-4 my-2 d-flex flex-column align-items-center justify-content-sm-between">
       <div className="btn-group">
         <button type="button" className="btn btn-primary" onClick={() => {
-          if (currPage !== 1) {
-            setContents({
-              ...contents,
-              currPage: currPage - 1
-            })
-          }
-        }}>
+            if (currPage !== 1) {
+              setContents({
+                ...contents,
+                currPage: currPage - 1
+              });
+            }
+          }}>
           이전
         </button>
         {
           buttonsJSX.map((val) => (<button key={val} className={`btn btn-primary` + (
-            currPage === val
+              currPage === val
               ? ` active disabled`
               : "")} onClick={() => {
-                setContents({
-                  ...contents,
-                  currPage: val
-                })
-              }}>
+              setContents({
+                ...contents,
+                currPage: val
+              });
+            }}>
             {val}
           </button>))
         }
         <button type="button" className="btn btn-primary" onClick={() => {
-          if (currPage !== buttonsNum) {
-            setContents({
-              ...contents,
-              currPage: currPage + 1
-            })
-          }
-        }}>
+            if (currPage !== buttonsNum) {
+              setContents({
+                ...contents,
+                currPage: currPage + 1
+              });
+            }
+          }}>
           다음
         </button>
       </div>

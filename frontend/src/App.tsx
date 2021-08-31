@@ -1,17 +1,16 @@
 import React from "react";
 import axios from "axios";
-import { useState } from "react";
+import {useState} from "react";
 import Navbar from "./modules/NavBar";
-import { Route } from "react-router-dom";
+import {Route} from "react-router-dom";
 import ProductPage from "./products/ProductPage";
 import LoginForm from "./userComponent/LoginForm";
-import { useEffect } from "react";
-import { Cookies } from "react-cookie";
+import {useEffect} from "react";
 import SignupForm from "./userComponent/SignupForm";
-import { webDataType } from "./types/types";
-import { ProductModifyForm } from "./products/ProductForm";
+import {webDataType} from "./types/types";
+import {ProductModifyForm} from "./products/ProductForm";
 import UserInfo from "./userComponent/UserInfo";
-import { ProductDetail } from "./products/ProductItem";
+import {ProductDetail} from "./products/ProductItem";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 
@@ -20,7 +19,7 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
 
 function App() {
-  const [webData, setWebData] = useState<webDataType>({ username: "", userChanges: true });
+  const [webData, setWebData] = useState<webDataType>({username: "", userChanges: true});
   const [checkChange, setChange] = useState<boolean>(true);
   useEffect(() => {
     const getUserInfo = async () => {
@@ -33,7 +32,7 @@ function App() {
     getUserInfo();
   }, [checkChange]);
   return (<div className="App">
-    <Navbar data={webData} setData={setWebData} />
+    <Navbar data={webData} setData={setWebData}/>
     <Route exact={true} path="/">
       <div className="p-3">
         <ul className="list-group">
@@ -44,22 +43,22 @@ function App() {
       </div>
     </Route>
     <Route path="/products" exact={true}>
-      <ProductPage />
+      <ProductPage/>
     </Route>
     <Route path="/products/:id" exact={true}>
-      <ProductDetail />
+      <ProductDetail/>
     </Route>
     <Route path="/products/modify/:id" exact={true}>
-      <ProductModifyForm checkChange={checkChange} setChange={setChange} />
+      <ProductModifyForm checkChange={checkChange} setChange={setChange}/>
     </Route>
     <Route path="/login">
-      <LoginForm data={webData} setData={setWebData} />
+      <LoginForm data={webData} setData={setWebData}/>
     </Route>
     <Route path="/signup">
-      <SignupForm data={webData} setData={setWebData} />
+      <SignupForm data={webData} setData={setWebData}/>
     </Route>
     <Route path="/user" exact={true}>
-      <UserInfo data={webData} setData={setWebData} />
+      <UserInfo data={webData} setData={setWebData}/>
     </Route>
     <Route path="/info">
       <div className="p-3">

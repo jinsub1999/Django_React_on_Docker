@@ -6,6 +6,7 @@ import {Link, useHistory, useParams} from "react-router-dom";
 import {dateStringKor} from "../modules/DateRelated";
 import serverRequest from "../modules/ServerRelated";
 import {MCP, productT, voteInfo, voteValue} from "../types/types";
+import Review from "./ProductReview";
 
 const ProductItemButtons = ({checkChange, setChange, productItem} : MCP) => {
   const hist = useHistory();
@@ -211,10 +212,6 @@ const ProductDetail = () => {
       setErr(true);
     });
   }, [id]);
-  const addDate = new Date(data.added_date);
-  const modDate = data.modded_date
-    ? new Date(data.modded_date)
-    : undefined;
   return err
     ? (<div className="container m-2">
       <div>해당 물품을 찾을 수 없습니다.</div>
@@ -232,7 +229,7 @@ const ProductDetail = () => {
               <th>제품명</th>
               <th>제품 가격</th>
               <th>제품 추가일시</th>
-              {modDate && <th>제품정보 수정일시</th>}
+              {data.modded_date && <th>제품정보 수정일시</th>}
               <th>
                 <i className="bi bi-hand-thumbs-up"></i>
               </th>
@@ -278,6 +275,7 @@ const ProductDetail = () => {
       <div className="border border-secondary rounded p-3">
         {data.description}
       </div>
+      <Review product={data}/>
     </div>);
 };
 export default ProductItem;

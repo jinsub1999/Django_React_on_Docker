@@ -4,11 +4,10 @@ import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
 
 const ProductPage = () => {
-  const [hidden, setHidden] = useState(false);
   const [checkChange, setCheckChange] = useState(false);
 
   return (<div className="container">
-    <ProductList setChange={setCheckChange} checkChange={checkChange} hidden={hidden}/>
+    <ProductList setChange={setCheckChange} checkChange={checkChange}/>
 
     <div className="container border border-info rounded position-relative p-3 m-1 mx-3">
       <div className="position-absolute bg-white fw-bold" style={{

@@ -4,9 +4,18 @@
     "editor.wordBasedSuggestions": false
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter":"vscode.typescript-language-features"
+    "editor.defaultFormatter": "Glavin001.unibeautify-vscode"
   },"[typescript]": {
     "editor.defaultFormatter": "Glavin001.unibeautify-vscode"
   },
   "editor.formatOnSave": true
+  ,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules" : true
+  }
 }

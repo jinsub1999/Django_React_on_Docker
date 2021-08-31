@@ -35,7 +35,7 @@ Using React.js to create client-side (front-end) views and Django & MySQL to man
 
 ## Features
 
-This website supports user related things via Django + MySQL. Users can save their images in Django server to change their profile images. Only logined user can submit, modify their own products. User can also upvote r
+This website supports user related things via Django + MySQL. Users can save their images in Django server to change their profile images. Only logined user can submit, modify their own products. User can also upvote or downvote products.
 
 ## License
 
