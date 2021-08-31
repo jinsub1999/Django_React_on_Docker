@@ -5,14 +5,72 @@ import {useHistory} from "react-router-dom";
 import {dateStringKor} from "../modules/DateRelated";
 import {ErrorListMsg} from "../modules/ErrorMsg";
 import serverRequest from "../modules/ServerRelated";
-import {FormError, productT, reviewContent} from "../types/types";
+import VotingButtons, {votableItem} from "../modules/VotingButton";
+import {FormError, MCP, productT, reviewContent} from "../types/types";
 
-const Review = ({product} : {
+const Review = ({val, mcp, product_id, usr} : {
+  val: reviewContent;
+  mcp: MCP;
+  product_id: number;
+  usr: string;
+}) => {
+  const [item, setItem] = useState<votableItem>(val);
+  return (<li key={val.id} className="list-group-item">
+    <div>
+      <strong>{val.author_name}</strong>
+    </div>
+    <div>{val.content}</div>
+
+    <div>
+      {
+        dateStringKor({
+          date: new Date(val.added_date),
+          Y: true,
+          M: true,
+          D: true,
+          h: true
+        })
+      }
+    </div>
+    <div className="d-flex justify-content-between">
+      <VotingButtons item={item} setItem={setItem} checkURL={`http://localhost:8000/products/review/${val.id}/`}/>
+      <div>
+        {/* <button onClick={() => {
+            serverRequest({url: `http://localhost:8000/products/review/${product_id}/`, method: "DELETE"}).then((res) => {
+              if (res === "Deleted") {
+                mcp.setChanging((c) => !c);
+              } else {
+                alert("적절한 요청이 아닙니다.");
+              }
+            });
+          }} className="btn btn-primary me-2">
+          수정
+        </button> */
+        }
+        {
+          usr === val.author_name && (<button onClick={() => {
+              serverRequest({url: `http://localhost:8000/products/review/${product_id}/`, method: "DELETE"}).then((res) => {
+                if (res === "Deleted") {
+                  mcp.setChanging((c) => !c);
+                } else {
+                  alert("적절한 요청이 아닙니다.");
+                }
+              });
+            }} className="btn btn-danger">
+            삭제
+          </button>)
+        }
+      </div>
+    </div>
+  </li>);
+};
+const ReviewList = ({product} : {
   product: productT
 }) => {
   const hist = useHistory();
   const [reviews, setReviews] = useState<reviewContent[]>([]);
-  const [change, setChange] = useState(true);
+  const [usrname, setUsrname] = useState("");
+  const [changing, setChanging] = useState(true);
   const [errs, setErrs] = useState<FormError[]>([]);
   const [reviewForm, setReviewForm] = useState({content: ""});
   const formChange = (e : React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -26,42 +84,20 @@ const Review = ({product} : {
       serverRequest({url: `http://localhost:8000/products/review/${product.id}/`, method: "GET"}).then((res) => {
         setReviews(res.data);
       });
-    }
-  , [product, change]);
+    
+    serverRequest({url: `http://localhost:8000/common/get_user/`, method: "GET"}).then((res) => {
+      setUsrname(res);
+    });
+  }, [product, changing]);
 
   return (<div>
     <ul className="list-group my-2">
       {
         reviews.map((val) => {
-          return (<li key={val.id} className="list-group-item">
-            <div>
-              <strong>{val.author_name}</strong>
-            </div>
-            <div>{val.content}</div>
-
-            <div>
-              {
-                dateStringKor({
-                  date: new Date(val.added_date),
-                  Y: true,
-                  M: true,
-                  D: true,
-                  h: true
-                })
-              }
-            </div>
-            <button onClick={() => {
-                serverRequest({url: `http://localhost:8000/products/review/${product.id}/`, method: "DELETE"}).then((res) => {
-                  if (res === "Deleted") {
-                    setChange((c) => !c);
-                  } else {
-                    alert("적절한 요청이 아닙니다.");
-                  }
-                });
-              }} className="btn btn-danger">
-              Delete
-            </button>
-          </li>);
+          return (<Review key={val.id} val={val} usr={usrname} mcp={{
+              changing,
+              setChanging
+            }} product_id={product.id}/>);
         })
       }
     </ul>
@@ -77,7 +113,7 @@ const Review = ({product} : {
               alert("로그인이 필요합니다.");
               hist.push("/login");
             } else if (res === "Reviewed") {
-              setChange((c) => !c);
+              setChanging((c) => !c);
               setReviewForm({content: ""});
               setErrs([]);
             } else if (res === "Already Reviewed") {
@@ -89,10 +125,10 @@ const Review = ({product} : {
             }
           });
         }} className="btn btn-primary">
-        CLICK
+        리뷰 제출
       </button>
     </div>
   </div>);
 };
 
-export default Review;
+export default ReviewList;

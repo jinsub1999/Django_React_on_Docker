@@ -1,12 +1,14 @@
 import React from "react";
 import {useEffect} from "react";
 import {useState} from "react";
-import {productT} from "../types/types";
+import {MCP, productT} from "../types/types";
 import ProductItem from "./ProductItem";
-import {MCP, productListContent} from "../types/types";
+import {productListContent} from "../types/types";
 import serverRequest from "../modules/ServerRelated";
 
-const ProductList = ({checkChange, setChange} : MCP) => {
+const ProductList = ({mcp} : {
+  mcp: MCP
+}) => {
   const [contents, setContents] = useState<productListContent>({currPage: 1, divider: 5, filters: "추가 일시", displaying: [], data: []});
   const {currPage, divider, data, filters, displaying} = contents;
   const sorting = (fil : string) => {
@@ -66,7 +68,7 @@ const ProductList = ({checkChange, setChange} : MCP) => {
         displaying: res.data.slice(0, Math.min(res.length, 5))
       }));
     });
-  }, [checkChange]);
+  }, [mcp.changing]);
   useEffect(() => {
     setContents((contents) => ({
       ...contents,
@@ -121,7 +123,7 @@ const ProductList = ({checkChange, setChange} : MCP) => {
       </div>
     </div>
     <ul className="list-group">
-      {displaying.map((val) => (<ProductItem key={val.id} checkChange={checkChange} setChange={setChange} productItem={val}/>))}
+      {displaying.map((val) => (<ProductItem key={val.id} productItem={val} mcp={mcp}/>))}
     </ul>
 
     <div className="mx-4 my-2 d-flex flex-column align-items-center justify-content-sm-between">

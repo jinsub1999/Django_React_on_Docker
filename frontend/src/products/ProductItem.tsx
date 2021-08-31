@@ -5,10 +5,14 @@ import {useState} from "react";
 import {Link, useHistory, useParams} from "react-router-dom";
 import {dateStringKor} from "../modules/DateRelated";
 import serverRequest from "../modules/ServerRelated";
-import {MCP, productT, voteInfo, voteValue} from "../types/types";
+import VotingButtons, {votableItem} from "../modules/VotingButton";
+import {MCP, productT} from "../types/types";
 import Review from "./ProductReview";
 
-const ProductItemButtons = ({checkChange, setChange, productItem} : MCP) => {
+const ProductItemButtons = ({productItem, mcp} : {
+  mcp: MCP;
+  productItem: productT;
+}) => {
   const hist = useHistory();
   if (productItem) 
     return (<div className="d-flex justify-content-end w-100">
@@ -36,7 +40,7 @@ const ProductItemButtons = ({checkChange, setChange, productItem} : MCP) => {
           };
           delProduct().then((res) => {
             if (res === "Deleted") {
-              setChange((checkChange) => !checkChange);
+              mcp.setChanging((c) => !c);
             } else if (res === "Login required") {
               alert("로그인이 필요한 기능입니다.");
               hist.push("/login");
@@ -53,139 +57,57 @@ const ProductItemButtons = ({checkChange, setChange, productItem} : MCP) => {
   }
 ;
 
-const VotingBtn = ({info, setInfo, productItem} : voteInfo) => {
-  const hist = useHistory();
-  const [votes, setVotes] = useState({up: 0, down: 0});
-  useEffect(() => {
-    if (productItem) 
-      setVotes({up: productItem.upvotes, down: productItem.downvotes});
-    }
-  , [productItem]);
-  return (<div className="btn-group d-flex my-1">
-    <button className="btn btn-success btn-sm" onClick={() => {
-        if (setInfo && productItem) {
-          serverRequest({method: "POST", url: `http://localhost:8000/products/vote/${productItem.id}/1/`}).then((res) => {
-            if (res === "OK") {
-              setVotes({
-                up: info.up
-                  ? votes.up - 1
-                  : votes.up + 1,
-                down: info.down
-                  ? votes.down - 1
-                  : votes.down
-              });
-              setInfo({
-                up: !info.up,
-                down: false
-              });
-            } else if (res === "Login Required") {
-              alert("로그인이 필요한 기능입니다.");
-              hist.push("/login");
-            }
-          });
-        }
-      }}>
-      <i className={`bi bi-hand-thumbs-up${info.up
-          ? "-fill"
-          : ""}`}></i>
-      <span className="mx-2">{productItem && votes.up}</span>
-    </button>
-    <button className="btn btn-danger btn-sm" onClick={() => {
-        if (setInfo && productItem) {
-          serverRequest({method: "POST", url: `http://localhost:8000/products/vote/${productItem.id}/2/`}).then((res) => {
-            if (res === "OK") {
-              setVotes({
-                up: info.up
-                  ? votes.up - 1
-                  : votes.up,
-                down: info.down
-                  ? votes.down - 1
-                  : votes.down + 1
-              });
-              setInfo({
-                up: false,
-                down: !info.down
-              });
-            } else if (res === "Login Required") {
-              alert("로그인이 필요한 기능입니다.");
-              hist.push("/login");
-            }
-          });
-        }
-      }}>
-      <i className={`bi bi-hand-thumbs-down${info.down
-          ? "-fill"
-          : ""}`}></i>
-      <span className="mx-2">{productItem && votes.down}</span>
-    </button>
-  </div>);
-};
+const ProductItem = ({productItem, mcp} : {
+  mcp: MCP;
+  productItem: productT;
+}) => {
+  const [vItem, setVItem] = useState<votableItem>(productItem);
+  const add_Date = new Date(productItem.added_date);
 
-const ProductItem = ({checkChange, setChange, productItem} : MCP) => {
-  const defaultVote: voteValue = {
-    up: productItem
-      ? productItem.upvoted
-        ? productItem.upvoted
-        : false
-      : false,
-    down: productItem
-      ? productItem.downvoted
-        ? productItem.downvoted
-        : false
-      : false
-  };
-  const [v, setV] = useState<voteValue>(defaultVote);
-
-  if (productItem) {
-    const add_Date = new Date(productItem.added_date);
-
-    const mod_Date = productItem.modded_date
-      ? new Date(productItem.modded_date)
-      : undefined;
-    return (<li key={productItem.id} className="list-group-item d-flex justify-content-between align-items-start position-relative">
-      <div>
-        <div className="ms-2 me-auto">
-          <div className="fs-4 fw-bold py-1 d-flex align-items-center">
-            {productItem.name}
-            <div className="fs-6 fw-light badge mx-2 p-1 rounded d-none d-md-block" style={{
-                backgroundColor: "#5ABCCB"
-              }}>
-              {productItem.author_name}
-            </div>
-          </div>
-          <div className="fs-6 text-black-50">
-            추가일시 :{" "}
-            {dateStringKor({date: add_Date, Y: true, M: true, D: true, h: true})}
-          </div>
-          {
-            mod_Date && (<div className="fs-6 text-black-50">
-              수정일시 :{" "}
-              {dateStringKor({date: mod_Date, Y: true, M: true, D: true, h: true})}
-            </div>)
-          }
-
-          <div className="text-truncate" style={{
-              width: 250,
-              maxWidth: "100%"
+  const mod_Date = productItem.modded_date
+    ? new Date(productItem.modded_date)
+    : undefined;
+  return (<li key={productItem.id} className="list-group-item d-flex justify-content-between align-items-start position-relative">
+    <div>
+      <div className="ms-2 me-auto">
+        <div className="fs-4 fw-bold py-1 d-flex align-items-center">
+          {productItem.name}
+          <div className="fs-6 fw-light badge mx-2 p-1 rounded d-none d-md-block" style={{
+              backgroundColor: "#5ABCCB"
             }}>
-            {productItem.description}
+            {productItem.author_name}
           </div>
         </div>
+        <div className="fs-6 text-black-50">
+          추가일시 :{" "}
+          {dateStringKor({date: add_Date, Y: true, M: true, D: true, h: true})}
+        </div>
+        {
+          mod_Date && (<div className="fs-6 text-black-50">
+            수정일시 :{" "}
+            {dateStringKor({date: mod_Date, Y: true, M: true, D: true, h: true})}
+          </div>)
+        }
+
+        <div className="text-truncate" style={{
+            width: 250,
+            maxWidth: "100%"
+          }}>
+          {productItem.description}
+        </div>
       </div>
-      <div className="mb-4">
-        <ProductItemButtons setChange={setChange} checkChange={checkChange} productItem={productItem}/>
-        <VotingBtn info={v} setInfo={setV} productItem={productItem}/>
-      </div>
-      <span className="position-absolute bottom-0 end-0 badge m-2 rounded-pill" style={{
-          backgroundColor: "#A6AD85"
-        }}>
-        가격 : {productItem.price}원
-      </span>
-    </li>);
-  } else 
-    return <div>loading...</div>;
-  }
-;
+    </div>
+    <div className="mb-4">
+      <ProductItemButtons productItem={productItem} mcp={mcp}/>
+      <VotingButtons item={vItem} setItem={setVItem} checkURL={`http://localhost:8000/products/vote/${productItem.id}/`}/>
+    </div>
+    <span className="position-absolute bottom-0 end-0 badge m-2 rounded-pill" style={{
+        backgroundColor: "#A6AD85"
+      }}>
+      가격 : {productItem.price}원
+    </span>
+  </li>);
+};
 const ProductDetail = () => {
   const [data, setData] = useState<productT>({
     id: -1,

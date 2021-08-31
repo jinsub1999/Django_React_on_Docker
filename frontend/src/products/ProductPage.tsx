@@ -1,13 +1,13 @@
 import React from "react";
-import {useState} from "react";
+import {MCP} from "../types/types";
 import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
 
-const ProductPage = () => {
-  const [checkChange, setCheckChange] = useState(false);
-
+const ProductPage = ({mcp} : {
+  mcp: MCP
+}) => {
   return (<div className="container">
-    <ProductList setChange={setCheckChange} checkChange={checkChange}/>
+    <ProductList mcp={mcp}/>
 
     <div className="container border border-info rounded position-relative p-3 m-1 mx-3">
       <div className="position-absolute bg-white fw-bold" style={{
@@ -15,7 +15,7 @@ const ProductPage = () => {
         }}>
         Submit your product!
       </div>
-      <ProductForm checkChange={checkChange} setChange={setCheckChange}/>
+      <ProductForm mcp={mcp}/>
     </div>
   </div>);
 };

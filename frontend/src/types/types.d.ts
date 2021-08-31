@@ -37,9 +37,8 @@ export type productT = {
 };
 
 type MutableComponentParams = {
-  checkChange: boolean;
-  setChange: React.Dispatch < React.SetStateAction<boolean> >;
-  productItem?: productT;
+  changing: boolean;
+  setChanging: React.Dispatch < React.SetStateAction<boolean> >;
 };
 export type MCP = MutableComponentParams;
 

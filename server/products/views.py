@@ -151,7 +151,9 @@ def productModify(req, product_id):
 def productReview(req, product_id):
     if req.method == "GET":
         ret = {"data": []}
-        for elem in Review.objects.order_by("-added_date"):
+        prod = get_object_or_404(Product, pk=product_id)
+
+        for elem in prod.review_product.order_by("-added_date"):
             d = elem.getReviewDict()
             if req.user.is_authenticated:
                 d["upvoted"] = True if elem.upvotes.filter(

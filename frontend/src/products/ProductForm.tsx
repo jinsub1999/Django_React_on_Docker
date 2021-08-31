@@ -3,9 +3,12 @@ import React, {useState} from "react";
 import {useEffect} from "react";
 import {useHistory, useParams} from "react-router-dom";
 import {ErrorListMsg} from "../modules/ErrorMsg";
+import serverRequest from "../modules/ServerRelated";
 import {FormError, MCP, productT} from "../types/types";
 
-const ProductModifyForm = ({checkChange, setChange} : MCP) => {
+const ProductModifyForm = ({mcp} : {
+  mcp: MCP
+}) => {
   const [err, setErr] = useState<FormError[]>([]);
   const [modProduct, setModProduct] = useState < productT | undefined > (undefined);
   const hist = useHistory();
@@ -55,21 +58,17 @@ const ProductModifyForm = ({checkChange, setChange} : MCP) => {
       </div>
       <div className="form-group m-3 d-flex flex-row-reverse">
         <button className="btn btn-primary" onClick={() => {
-            const modifyProduct = async () => {
-              const reqq = new FormData();
-              reqq.set("name", modProduct.name);
-              reqq.set("price", `${modProduct.price}`);
-              reqq.set("description", modProduct.description);
-              const res = await axios({headers: {}, data: reqq, method: "POST", url: `http://localhost:8000/products/modify/${modProduct.id}/`}).then((res) => res.data);
-              return res;
-            };
-            modifyProduct().then((res) => {
+            const reqq = new FormData();
+            reqq.set("name", modProduct.name);
+            reqq.set("price", `${modProduct.price}`);
+            reqq.set("description", modProduct.description);
+            serverRequest({method: "POST", url: `http://localhost:8000/products/modify/${modProduct.id}/`, formData: reqq}).then((res) => {
               if (res !== "Modified") {
                 setErr(res.errs);
               } else {
-                setChange((c) => !c);
                 setErr([]);
-                hist.goBack();
+                mcp.setChanging((c) => !c);
+                hist.push("/products");
               }
             });
           }}>
@@ -82,7 +81,9 @@ const ProductModifyForm = ({checkChange, setChange} : MCP) => {
   }
 ;
 
-const ProductForm = ({checkChange, setChange} : MCP) => {
+const ProductForm = ({mcp} : {
+  mcp: MCP
+}) => {
   const [err, setErr] = useState<FormError[]>([]);
   const [data, setData] = useState({name: "", price: 0, description: ""});
   const hist = useHistory();
@@ -117,18 +118,13 @@ const ProductForm = ({checkChange, setChange} : MCP) => {
     </div>
     <div className="form-group m-3 d-flex flex-row-reverse">
       <button className="btn btn-primary" onClick={() => {
-          const addProduct = async () => {
-            const reqq = new FormData();
-            reqq.set("name", data.name);
-            reqq.set("price", `${data.price}`);
-            reqq.set("description", data.description);
-            const res = await axios({headers: {}, data: reqq, method: "POST", url: `http://localhost:8000/products/`}).then((res) => res.data);
-            return res;
-          };
-          addProduct().then((res) => {
+          const reqq = new FormData();
+          reqq.set("name", data.name);
+          reqq.set("price", `${data.price}`);
+          reqq.set("description", data.description);
+          serverRequest({url: `http://localhost:8000/products/`, method: "POST", formData: reqq}).then((res) => {
             if (res === "OK") {
-              if (setChange !== undefined) 
-                setChange((c) => !c);
+              mcp.setChanging((c) => !c);
               setData({name: "", price: 0, description: ""});
               setErr([]);
             } else if (res === "Login Required") {

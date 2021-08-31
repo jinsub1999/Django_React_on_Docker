@@ -13,6 +13,7 @@ import UserInfo from "./userComponent/UserInfo";
 import {ProductDetail} from "./products/ProductItem";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
+import serverRequest from "./modules/ServerRelated";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -20,17 +21,19 @@ axios.defaults.withCredentials = true;
 
 function App() {
   const [webData, setWebData] = useState<webDataType>({username: "", userChanges: true});
-  const [checkChange, setChange] = useState<boolean>(true);
+  const [changing, setChanging] = useState<boolean>(true);
+  const mcp = {
+    changing,
+    setChanging
+  };
   useEffect(() => {
-    const getUserInfo = async () => {
-      const usr_name = await axios.get("http://localhost:8000/common/get_user/").then((res) => res.data);
+    serverRequest({url: "http://localhost:8000/common/get_user/", method: "GET"}).then((res) => {
       setWebData((webData) => ({
         ...webData,
-        username: usr_name
+        username: res
       }));
-    };
-    getUserInfo();
-  }, [checkChange]);
+    });
+  }, [webData.userChanges]);
   return (<div className="App">
     <Navbar data={webData} setData={setWebData}/>
     <Route exact={true} path="/">
@@ -43,13 +46,13 @@ function App() {
       </div>
     </Route>
     <Route path="/products" exact={true}>
-      <ProductPage/>
+      <ProductPage mcp={mcp}/>
     </Route>
     <Route path="/products/:id" exact={true}>
       <ProductDetail/>
     </Route>
     <Route path="/products/modify/:id" exact={true}>
-      <ProductModifyForm checkChange={checkChange} setChange={setChange}/>
+      <ProductModifyForm mcp={mcp}/>
     </Route>
     <Route path="/login">
       <LoginForm data={webData} setData={setWebData}/>
