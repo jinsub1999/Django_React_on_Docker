@@ -1,82 +1,114 @@
 import React from "react";
-import {useEffect} from "react";
-import {useState} from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-import {productT} from "../types/types";
+import { productT } from "../types/types";
 import ProductItem from "./ProductItem";
-import {MCP} from "../types/types";
-const ProductList = ({checkChange, setChange, hidden} : {
+import { MCP, productListContent } from "../types/types";
+import serverRequest from "../modules/ServerRelated";
+
+
+const ProductList = ({ checkChange, setChange, hidden }: {
   hidden: boolean;
 } & MCP) => {
-  const [data, setData] = useState<productT[]>([]);
-  const [currPage, setCurrPage] = useState(1);
-  const [divider, setDivider] = useState(5);
-  const [displaying, setDisplaying] = useState<productT[]>([]);
-
-  useEffect(() => {
-    async function getProductList() {
-      try {
-        const result = await axios.get("http://localhost:8000/products/productList/").then((res) => res.data);
-        setData(result.data);
-        return result.data;
-      } catch (e) {
-        console.error(e);
-      }
+  const [contents, setContents] = useState<productListContent>(
+    {
+      currPage: 1,
+      divider: 5,
+      filters: "추가 일시",
+      displaying: [],
+      data: [],
     }
-    getProductList().then((res) => {
-      setDisplaying(res.slice(0, Math.min(res.length, 5)));
-    }).catch((err) => console.error(err));
+  );
+  const { currPage, divider, data, filters, displaying } = contents;
+  const sorting = (fil: string) => {
+    console.log(fil);
+
+    if (fil == "추가 일시")
+      return (a: productT, b: productT) => {
+        if (new Date(a.added_date) > new Date(b.added_date))
+          return -1;
+        else
+          return 1;
+      }
+    else if (fil == "수정 일시")
+      return (a: productT, b: productT) => {
+        if (!a.modded_date && !b.modded_date)
+          return 0;
+        else if (!a.modded_date)
+          return 1;
+        else if (!b.modded_date)
+          return -1;
+        else if (new Date(a.modded_date) > new Date(b.modded_date))
+          return -1;
+        else
+          return 1;
+      }
+    else if (fil == "좋아요 순")
+      return (a: productT, b: productT) => {
+        if (a.upvotes > b.upvotes)
+          return -1;
+        else
+          return 1;
+      }
+    else if (fil == "싫어요 순")
+      return (a: productT, b: productT) => {
+        if (a.downvotes > b.downvotes)
+          return -1;
+        else
+          return 1;
+      }
+    else
+      return (a: productT, b: productT) => {
+        if (new Date(a.added_date) > new Date(b.added_date))
+          return 1;
+        else
+          return -1;
+      }
+  }
+  useEffect(() => {
+    serverRequest({
+      url: "http://localhost:8000/products/productList/", method: "GET"
+    }).then(res => {
+      setContents(contents => ({
+        ...contents,
+        data: res.data,
+        displaying: res.data.slice(0, Math.min(res.length, 5))
+      }))
+    })
   }, [checkChange]);
   useEffect(() => {
-    setDisplaying(data.slice((currPage - 1) * divider, Math.min(data.length, currPage * divider)));
-  }, [divider, currPage, data]);
+    setContents(contents => ({
+      ...contents,
+      displaying: data.slice((currPage - 1) * divider, Math.min(data.length, currPage * divider))
+    }))
+  }, [currPage, divider, data]);
   useEffect(() => {
-    setCurrPage(1);
-  }, [divider]);
+    setContents(contents => ({
+      ...contents,
+      data: data.sort(sorting(filters)),
+      displaying: data.slice((currPage - 1) * divider, Math.min(data.length, currPage * divider)),
+      currPage: 1
+    }))
+  }, [divider, filters, data]);
   const buttonsNum = Math.ceil(data.length / divider);
   const buttonsJSX = [];
-  for (let i = 0; i < buttonsNum; i++) 
+  for (let i = 0; i < buttonsNum; i++)
     buttonsJSX.push(i + 1);
-  
-  const onChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
-    setDivider(parseInt(e.target.value));
+
+  const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setContents({
+      ...contents,
+      [e.target.name]: typeof e.target.value === "number" ? parseInt(e.target.value) : e.target.value
+    })
   };
 
   return (<div className="container min-vw-50 p-3">
-    <ul className="list-group" hidden={hidden}>
-      {displaying.map((val) => (<ProductItem key={val.id} checkChange={checkChange} setChange={setChange} productItem={val}/>))}
-    </ul>
 
-    <div className="mx-4 my-2 d-flex flex-column align-items-center justify-content-sm-between">
-      <div className="btn-group">
-        <button type="button" className="btn btn-primary" onClick={() => {
-            if (currPage !== 1) {
-              setCurrPage(currPage - 1);
-            }
-          }}>
-          이전
-        </button>
-        {
-          buttonsJSX.map((val) => (<button key={val} className={`btn btn-primary` + (
-              currPage === val
-              ? ` active disabled`
-              : "")} onClick={() => {
-              setCurrPage(val);
-            }}>
-            {val}
-          </button>))
-        }
-        <button type="button" className="btn btn-primary" onClick={() => {
-            if (currPage !== buttonsNum) {
-              setCurrPage(currPage + 1);
-            }
-          }}>
-          다음
-        </button>
-      </div>
-      <div className="top-25 bg-dark text-light rounded p-1 m-1">
+    <div className="bg-dark text-light rounded p-3 my-2">
+      <div className="bg-secondary p-1 my-1 rounded">
         <label htmlFor="divider" className="form-label">
-          How many products in one list?
+          Products per page
         </label>
         <select name="divider" className="form-select w-50" onChange={onChange} value={divider}>
           <option value={3}>3</option>
@@ -84,6 +116,58 @@ const ProductList = ({checkChange, setChange, hidden} : {
           <option value={10}>10</option>
           <option value={20}>20</option>
         </select>
+      </div>
+      <div className="bg-secondary p-1 my-1 rounded">
+        <label htmlFor="filters" className="form-label">
+          Sort by...
+        </label>
+        <select name="filters" className="form-select w-50" onChange={onChange} value={filters}>
+          <option value={"추가 일시"}>추가 일시</option>
+          <option value={"수정 일시"}>수정 일시</option>
+          <option value={"좋아요 순"}>좋아요 순</option>
+          <option value={"싫어요 순"}>싫어요 순</option>
+        </select>
+      </div>
+    </div>
+    <ul className="list-group" hidden={hidden}>
+      {displaying.map((val) => (<ProductItem key={val.id} checkChange={checkChange} setChange={setChange} productItem={val} />))}
+    </ul>
+
+    <div className="mx-4 my-2 d-flex flex-column align-items-center justify-content-sm-between">
+      <div className="btn-group">
+        <button type="button" className="btn btn-primary" onClick={() => {
+          if (currPage !== 1) {
+            setContents({
+              ...contents,
+              currPage: currPage - 1
+            })
+          }
+        }}>
+          이전
+        </button>
+        {
+          buttonsJSX.map((val) => (<button key={val} className={`btn btn-primary` + (
+            currPage === val
+              ? ` active disabled`
+              : "")} onClick={() => {
+                setContents({
+                  ...contents,
+                  currPage: val
+                })
+              }}>
+            {val}
+          </button>))
+        }
+        <button type="button" className="btn btn-primary" onClick={() => {
+          if (currPage !== buttonsNum) {
+            setContents({
+              ...contents,
+              currPage: currPage + 1
+            })
+          }
+        }}>
+          다음
+        </button>
       </div>
     </div>
   </div>);

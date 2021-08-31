@@ -1,10 +1,10 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { dateStringKor } from "../modules/DateRelated";
 import serverRequest from "../modules/ServerRelated";
-import { MCP, productT, webDataType } from "../types/types";
+import { productT, webDataType } from "../types/types";
 
 const UserNavInfo = ({ data, setData }: {
   data: webDataType;
@@ -53,7 +53,7 @@ const UserInfo = ({ data, setData }: {
   return (<div className="border border-dark m-3 p-1">
     <div className="p-3">
       <div className="d-flex justify-content-center bg-secondary bg-gradient">
-        {preview && <img src={preview} height={200} width={200} />}
+        {preview && <img src={preview} alt="" height={200} width={200} />}
 
       </div>
       <div className="form-group align-items-center my-2">

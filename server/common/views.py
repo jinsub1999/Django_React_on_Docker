@@ -79,7 +79,7 @@ def login(req):
         return HttpResponse("{0}".format(req.user))
 
 
-@ login_required(login_url="http://localhost:3000/login")
+@login_required(login_url="http://localhost:3000/login")
 def logout(req):
     if req.method == "POST":
         auth_logout(req)
@@ -112,7 +112,6 @@ def signup(req):
                 for (idx, _v) in enumerate(v):
                     ret["errs"].append(
                         {"errName": k+"SIGNUPERR", "errDescription": "{0}".format(_v)[2:-2]})
-                    print(_v)
             return JsonResponse(data=ret)
     else:
         return HttpResponse("Error. Wrong request method ({0}). Use POST.".format(req.method))

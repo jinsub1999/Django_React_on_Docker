@@ -1,15 +1,15 @@
 import axios from "axios";
 import React from "react";
-import {useState} from "react";
-import {Link, useHistory} from "react-router-dom";
-import {ErrorListMsg} from "../modules/ErrorMsg";
-import {FormError, webDataType} from "../types/types";
+import { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { ErrorListMsg } from "../modules/ErrorMsg";
+import { FormError, webDataType } from "../types/types";
 
-const SignupForm = ({data, setData} : {
+const SignupForm = ({ data, setData }: {
   data: webDataType;
-  setData: React.Dispatch < React.SetStateAction<webDataType> >;
+  setData: React.Dispatch<React.SetStateAction<webDataType>>;
 }) => {
-  const [signupData, setSignupData] = useState({username: "", password1: "", password2: ""});
+  const [signupData, setSignupData] = useState({ username: "", password1: "", password2: "" });
   const [errs, setErrs] = useState<FormError[]>([]);
   const hist = useHistory();
   const signupPOST = () => {
@@ -18,7 +18,7 @@ const SignupForm = ({data, setData} : {
       reqq.set("username", signupData.username);
       reqq.set("password1", signupData.password1);
       reqq.set("password2", signupData.password2);
-      const res = await axios({data: reqq, method: "POST", url: `http://localhost:8000/common/signup/`}).then((res) => res.data);
+      const res = await axios({ data: reqq, method: "POST", url: `http://localhost:8000/common/signup/` }).then((res) => res.data);
       return res;
     };
     SignupAttempt().then((res) => {
@@ -31,14 +31,14 @@ const SignupForm = ({data, setData} : {
         setErrs(res.errs);
       } else {
         setData({
-          ...data,
-          username: signupData.username
+          username: signupData.username,
+          userChanges: !data.userChanges
         });
         hist.push("/");
       }
     });
   };
-  const onChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignupData({
       ...signupData,
       [e.target.name]: e.target.value
@@ -46,7 +46,7 @@ const SignupForm = ({data, setData} : {
   };
   return (<div>
     <div className="m-3">
-      <ErrorListMsg errs={errs}/>
+      <ErrorListMsg errs={errs} />
       <div className="mb-3">
         <label htmlFor="username" className="form-label">
           Username
@@ -64,10 +64,10 @@ const SignupForm = ({data, setData} : {
           Password (Type again)
         </label>
         <input className="form-control" value={signupData.password2} onChange={onChange} name="password2" type="password" onKeyPress={event => {
-            if (event.key === "Enter") {
-              signupPOST();
-            }
-          }}></input>
+          if (event.key === "Enter") {
+            signupPOST();
+          }
+        }}></input>
       </div>
       <div className="form-group d-flex align-items-center">
         <button className="btn btn-primary me-2" onClick={signupPOST}>

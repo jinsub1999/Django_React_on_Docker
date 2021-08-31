@@ -60,3 +60,11 @@ export type voteInfo = {
   setInfo?: React.Dispatch < React.SetStateAction<vote_up_down> >;
   productItem?: productT;
 };
+
+export type productListContent = {
+  currPage: number;
+  divider: number;
+  filters: string;
+  displaying: productT[];
+  data: productT[];
+};
