@@ -1,5 +1,3 @@
-import axios from "axios";
-import React from "react";
 import {useEffect} from "react";
 import {useState} from "react";
 import {Link, useHistory, useParams} from "react-router-dom";
@@ -34,11 +32,7 @@ const ProductItemButtons = ({productItem, mcp} : {
         수정
       </button>
       <button className="btn btn-danger btn-sm d-none d-md-block" onClick={() => {
-          const delProduct = async () => {
-            const res = await axios({headers: {}, method: "POST", url: `http://localhost:8000/products/del/${productItem.id}/`}).then((res) => res.data);
-            return res;
-          };
-          delProduct().then((res) => {
+          serverRequest({url: `http://localhost:8000/products/del/${productItem.id}/`, method: "POST"}).then((res) => {
             if (res === "Deleted") {
               mcp.setChanging((c) => !c);
             } else if (res === "Login required") {
@@ -79,13 +73,11 @@ const ProductItem = ({productItem, mcp} : {
           </div>
         </div>
         <div className="fs-6 text-black-50">
-          추가일시 :{" "}
-          {dateStringKor({date: add_Date, Y: true, M: true, D: true, h: true})}
+          추가일시 : {dateStringKor({date: add_Date, strformat: "YMDh"})}
         </div>
         {
           mod_Date && (<div className="fs-6 text-black-50">
-            수정일시 :{" "}
-            {dateStringKor({date: mod_Date, Y: true, M: true, D: true, h: true})}
+            수정일시 : {dateStringKor({date: mod_Date, strformat: "YMDh"})}
           </div>)
         }
 
@@ -151,7 +143,7 @@ const ProductDetail = () => {
               <th>제품명</th>
               <th>제품 가격</th>
               <th>제품 추가일시</th>
-              {data.modded_date && <th>제품정보 수정일시</th>}
+              {data.modded_date && <th>제품 수정일시</th>}
               <th>
                 <i className="bi bi-hand-thumbs-up"></i>
               </th>
@@ -168,10 +160,7 @@ const ProductDetail = () => {
                 {
                   dateStringKor({
                     date: new Date(data.added_date),
-                    Y: true,
-                    M: true,
-                    D: true,
-                    h: true
+                    strformat: "YMDh"
                   })
                 }
               </td>
@@ -180,10 +169,7 @@ const ProductDetail = () => {
                   {
                     dateStringKor({
                       date: new Date(data.modded_date),
-                      Y: true,
-                      M: true,
-                      D: true,
-                      h: true
+                      strformat: "YMDh"
                     })
                   }
                 </td>)

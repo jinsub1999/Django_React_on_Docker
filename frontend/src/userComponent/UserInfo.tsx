@@ -2,6 +2,7 @@ import React from "react";
 import {useEffect} from "react";
 import {useState} from "react";
 import {Link, useHistory} from "react-router-dom";
+import {sortingFilter} from "../modules/ArrayRelated";
 import {dateStringKor} from "../modules/DateRelated";
 import serverRequest from "../modules/ServerRelated";
 import {productT, webDataType} from "../types/types";
@@ -12,7 +13,10 @@ const UserNavInfo = ({data, setData} : {
 }) => {
   return (<Link to="/user" className="btn bg-light justify-content-center border align-items-center border-dark rounded m-1 p-1 d-flex fw-bold">
     <div className="d-none d-sm-block">
-      <img alt="" src={`http://localhost:8000/common/profile/?${data.username}`} height={100} width={100} className="p-1 m-1"/>
+      <img alt="" src={`http://localhost:8000/common/profile/?${data.username}=${
+        data.userChanges
+          ? 1
+          : 0}`} height={100} width={100} className="p-1 m-1"/>
     </div>
     {data.username}
   </Link>);
@@ -54,7 +58,7 @@ const UserInfo = ({data, setData} : {
         <label htmlFor="imagefile" className="form-label">
           Change Profile image (200 * 200) {preview && `(Preview)`}
         </label>
-        <input className="form-control" type="file" formEncType="multipart/form-data" name="imagefile" onChange={onImgChange} accept="image/png, image/jpeg"/>
+        <input className="form-control" type="file" formEncType="multipart/form-data" name="imagefile" onChange={onImgChange} accept="image/*"/>
       </div>
 
       <button className={"btn btn-primary" + (
@@ -101,7 +105,7 @@ const UserInfo = ({data, setData} : {
         </thead>
         <tbody>
           {
-            upvotedProduct.map((val) => {
+            upvotedProduct.sort(sortingFilter("upvote")).map((val) => {
               return (<tr key={val.id}>
                 <td>{val.name}</td>
                 <td>{val.price}</td>
@@ -109,10 +113,7 @@ const UserInfo = ({data, setData} : {
                   {
                     dateStringKor({
                       date: new Date(val.added_date),
-                      Y: true,
-                      M: true,
-                      D: true,
-                      h: true
+                      strformat: "YMDh"
                     })
                   }
                 </td>
@@ -120,10 +121,7 @@ const UserInfo = ({data, setData} : {
                   {
                     val.modded_date && dateStringKor({
                       date: new Date(val.modded_date),
-                      Y: true,
-                      M: true,
-                      D: true,
-                      h: true
+                      strformat: "YMDh"
                     })
                   }
                 </td>
@@ -155,7 +153,7 @@ const UserInfo = ({data, setData} : {
         </thead>
         <tbody>
           {
-            downvotedProduct.map((val) => {
+            downvotedProduct.sort(sortingFilter("downvote")).map((val) => {
               return (<tr key={val.id}>
                 <td>{val.name}</td>
                 <td>{val.price}</td>
@@ -163,10 +161,7 @@ const UserInfo = ({data, setData} : {
                   {
                     dateStringKor({
                       date: new Date(val.added_date),
-                      Y: true,
-                      M: true,
-                      D: true,
-                      h: true
+                      strformat: "YMDh"
                     })
                   }
                 </td>
@@ -174,10 +169,7 @@ const UserInfo = ({data, setData} : {
                   {
                     val.modded_date && dateStringKor({
                       date: new Date(val.modded_date),
-                      Y: true,
-                      M: true,
-                      D: true,
-                      h: true
+                      strformat: "YMDh"
                     })
                   }
                 </td>

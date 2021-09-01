@@ -25,28 +25,13 @@ const Review = ({val, mcp, product_id, usr} : {
       {
         dateStringKor({
           date: new Date(val.added_date),
-          Y: true,
-          M: true,
-          D: true,
-          h: true
+          strformat: "YMDh"
         })
       }
     </div>
     <div className="d-flex justify-content-between">
       <VotingButtons item={item} setItem={setItem} checkURL={`http://localhost:8000/products/review/${val.id}/`}/>
       <div>
-        {/* <button onClick={() => {
-            serverRequest({url: `http://localhost:8000/products/review/${product_id}/`, method: "DELETE"}).then((res) => {
-              if (res === "Deleted") {
-                mcp.setChanging((c) => !c);
-              } else {
-                alert("적절한 요청이 아닙니다.");
-              }
-            });
-          }} className="btn btn-primary me-2">
-          수정
-        </button> */
-        }
         {
           usr === val.author_name && (<button onClick={() => {
               serverRequest({url: `http://localhost:8000/products/review/${product_id}/`, method: "DELETE"}).then((res) => {

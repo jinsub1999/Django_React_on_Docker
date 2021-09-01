@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, {useState} from "react";
 import {useEffect} from "react";
 import {useHistory, useParams} from "react-router-dom";
@@ -22,16 +21,9 @@ const ProductModifyForm = ({mcp} : {
     });
   };
   useEffect(() => {
-    const getProductData = async () => {
-      try {
-        const res = await axios.get(`http://localhost:8000/products/${id}`).then((res) => res.data).catch();
-        setModProduct(res.data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    getProductData();
+    serverRequest({url: `http://localhost:8000/products/${id}`, method: "GET"}).then((res) => {
+      setModProduct(res.data);
+    });
   }, [id]);
   if (modProduct !== undefined) 
     return (<div className="m-3">

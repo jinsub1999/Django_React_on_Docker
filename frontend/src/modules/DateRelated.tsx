@@ -2,25 +2,26 @@ import {DateParams} from "../types/types";
 
 export const dateStringKor = (dp : DateParams) => {
   let ret = "";
-
-  ret += dp.Y
-    ? `${dp.date.getFullYear()}년 `
-    : "";
-  ret += dp.M
-    ? `${dp.date.getMonth() + 1}월 `
-    : "";
-  ret += dp.D
-    ? `${dp.date.getDate()}일 `
-    : "";
-  ret += dp.h
-    ? `${dp.date.getHours()}시 `
-    : "";
-  ret += dp.m
-    ? `${dp.date.getMinutes()}분 `
-    : "";
-  ret += dp.s
-    ? `${dp.date.getSeconds()}초 `
-    : "";
+  const formats = [
+    "Y",
+    "M",
+    "D",
+    "h",
+    "m",
+    "s"
+  ];
+  const formatStr = [
+    `${dp.date.getFullYear()}년 `, `${dp.date.getMonth() + 1}월 `,
+    `${dp.date.getDate()}일 `,
+    `${dp.date.getHours()}시 `,
+    `${dp.date.getMinutes()}분 `,
+    `${dp.date.getSeconds()}초 `
+  ];
+  formats.forEach((val, idx) => {
+    if (dp.strformat.includes(val)) 
+      ret += formatStr[idx];
+    }
+  );
   if (ret.endsWith(" ")) 
     return ret.slice(0, ret.length - 1);
   else 

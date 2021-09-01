@@ -44,12 +44,7 @@ export type MCP = MutableComponentParams;
 
 export type DateParams = {
   date: Date;
-  Y?: true;
-  M?: true;
-  D?: true;
-  h?: true;
-  m?: true;
-  s?: true;
+  strformat: string;
 };
 export type voteValue = {
   up: boolean;

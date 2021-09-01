@@ -1,7 +1,7 @@
 import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { dateStringKor } from "./DateRelated";
+import {useEffect} from "react";
+import {useState} from "react";
+import {dateStringKor} from "./DateRelated";
 
 const Clock = () => {
   const [currTime, setCurrTime] = useState(new Date());
@@ -12,29 +12,10 @@ const Clock = () => {
   }, [currTime]);
   return (<div className="">
     <div className="bg-dark text-light m-1 p-1 rounded" style={{
-      fontSize: 10
-    }}>
-      {
-        dateStringKor({
-          date: currTime,
-          Y: true,
-          M: true,
-          D: true,
-          h: true,
-          m: true,
-          s: true
-        })
-      }
+        fontSize: 10
+      }}>
+      {dateStringKor({date: currTime, strformat: "YMDhms"})}
     </div>
-    {/* <div className="bg-dark text-light m-1 p-1 rounded">
-      {currTime.getFullYear()}년 {currTime.getMonth()}월 {currTime.getDate()}
-      일
-    </div>
-    <div className="bg-dark text-light m-1 p-1 rounded">
-      {currTime.getHours()}시 {currTime.getMinutes()}분{" "}
-      {currTime.getSeconds()}초
-    </div> */
-    }
   </div>);
 };
 
@@ -48,7 +29,7 @@ const Timer = () => {
         setTimeDelta((timeDelta) => timeDelta + 1);
       }, 1000);
 
-      return () => {
+      return() => {
         clearInterval(interval);
       };
     }
@@ -56,19 +37,19 @@ const Timer = () => {
   return (<div>
     <div>{timeDelta}</div>
     <button onClick={() => {
-      setTimeDelta(0);
-    }}>
+        setTimeDelta(0);
+      }}>
       Reset!
     </button>
     <button onClick={() => {
-      setTimerID(true);
-    }}>
+        setTimerID(true);
+      }}>
       Start!
     </button>
 
     <button onClick={() => {
-      setTimerID(false);
-    }}>
+        setTimerID(false);
+      }}>
       Stop!
     </button>
   </div>);

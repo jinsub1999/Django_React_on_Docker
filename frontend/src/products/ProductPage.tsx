@@ -9,7 +9,7 @@ const ProductPage = ({mcp} : {
   return (<div className="container">
     <ProductList mcp={mcp}/>
 
-    <div className="container border border-info rounded position-relative p-3 m-1 mx-3">
+    <div className="container border border-info rounded position-relative mt-4">
       <div className="position-absolute bg-white fw-bold" style={{
           top: -13
         }}>
