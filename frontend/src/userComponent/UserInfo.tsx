@@ -107,7 +107,11 @@ const UserInfo = ({data, setData} : {
           {
             upvotedProduct.sort(sortingFilter("upvote")).map((val) => {
               return (<tr key={val.id}>
-                <td>{val.name}</td>
+                <td>
+                  <Link className="link-success" to={`/products/${val.id}`}>
+                    {val.name}
+                  </Link>
+                </td>
                 <td>{val.price}</td>
                 <td>
                   {
@@ -155,7 +159,11 @@ const UserInfo = ({data, setData} : {
           {
             downvotedProduct.sort(sortingFilter("downvote")).map((val) => {
               return (<tr key={val.id}>
-                <td>{val.name}</td>
+                <td>
+                  <Link className="link-danger" to={`/products/${val.id}`}>
+                    {val.name}
+                  </Link>
+                </td>
                 <td>{val.price}</td>
                 <td>
                   {
